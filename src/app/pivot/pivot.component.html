@@ -1,4 +1,3 @@
-<h1>Pivot</h1>
 <form>
   <div class="row">
     <div class="col-md-6 custom-file-input-column">
@@ -17,27 +16,37 @@
         [columns]="columns"
         [value]="data"
         [resizableColumns]="true">
-        <ng-template pTemplate="header" let-columns>
+        <ng-template
+          pTemplate="header"
+          let-columns>
           <tr>
-            <th *ngFor="let column of columns">
+            <th *ngFor="let column of columns; let i = index"
+                pResizableColumn
+                [pSortableColumn]="columns[i]">
               {{ column }}
-              <p-sortIcon [field]="column.field"
+              <p-sortIcon [field]="columns[i]"
                           ariaLabel="Activate to sort"
                           ariaLabelDesc="Activate to sort in descending order"
                           ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
             </th>
           </tr>
           <tr>
-            <th *ngFor="let column of columns">
-              <input pInputText type="text"
-                     (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
+            <th *ngFor="let column of columns; let i = index">
+              <input pInputText
+                     type="text"
+                     (input)="dataTable.filter($event.target.value, i, 'contains')">
             </th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-          <tr [pSelectableRow]="row" [pSelectableRowIndex]="rowIndex">
-            <td *ngFor="let column of row">
-              {{ column }}
+        <ng-template
+          pTemplate="body"
+          let-row
+          let-rowIndex="rowIndex">
+          <tr
+            [pSelectableRow]="row"
+            [pSelectableRowIndex]="rowIndex">
+            <td *ngFor="let column of row; let i = index">
+              {{ row[i] }}
             </td>
           </tr>
         </ng-template>

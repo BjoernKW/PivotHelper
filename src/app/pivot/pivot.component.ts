@@ -40,6 +40,7 @@ export class PivotComponent implements OnInit {
       const workSheet: XLSX.WorkSheet = workBook.Sheets[workSheetName];
 
       this.data = <Matrix>(XLSX.utils.sheet_to_json(workSheet, {header: 1}));
+
       this.columns = this.data[0];
       this.data = this.data.slice(1, this.data.length - 1);
     };
