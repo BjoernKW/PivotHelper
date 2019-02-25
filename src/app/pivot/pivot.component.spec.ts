@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PivotComponent } from './pivot.component';
 import { TableModule } from 'primeng/table';
+import { PivotTableComponent } from "./pivot-table/pivot-table.component";
 
 describe('PivotComponent', () => {
   let component: PivotComponent;
@@ -10,7 +11,8 @@ describe('PivotComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        PivotComponent
+        PivotComponent,
+        PivotTableComponent
       ],
       imports: [
         TableModule
