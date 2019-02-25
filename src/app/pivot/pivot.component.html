@@ -20,19 +20,14 @@
           pTemplate="header"
           let-columns>
           <tr>
-            <th *ngFor="let column of columns; let i = index"
-                pResizableColumn
-                [pSortableColumn]="columns[i]">
+            <th *ngFor="let column of columns">
               {{ column }}
-              <p-sortIcon [field]="columns[i]"
-                          ariaLabel="Activate to sort"
-                          ariaLabelDesc="Activate to sort in descending order"
-                          ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
             </th>
           </tr>
           <tr>
             <th *ngFor="let column of columns; let i = index">
               <input pInputText
+                     class="form-control"
                      type="text"
                      (input)="dataTable.filter($event.target.value, i, 'contains')">
             </th>
@@ -45,8 +40,8 @@
           <tr
             [pSelectableRow]="row"
             [pSelectableRowIndex]="rowIndex">
-            <td *ngFor="let column of row; let i = index">
-              {{ row[i] }}
+            <td *ngFor="let column of row">
+              {{ column }}
             </td>
           </tr>
         </ng-template>

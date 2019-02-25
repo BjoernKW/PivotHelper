@@ -7,11 +7,13 @@ import { PivotComponent } from './pivot/pivot.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TableModule } from 'primeng/table';
+import { PivotTableComponent } from './pivot/pivot-table/pivot-table.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PivotComponent
+    PivotComponent,
+    PivotTableComponent
   ],
   imports: [
     BrowserModule,
