@@ -1,76 +1,101 @@
-<div class="row">
-  <div class="col-sm-6 custom-file-input-column">
-    <div class="form-group">
-      <input type="file" class="custom-file-input" id="inputFile" (change)="onFileChange($event)">
-      <label class="custom-file-label" for="inputFile">Choose file</label>
-    </div>
-  </div>
-</div>
-<div  *ngIf="outputData && outputData.length > 0">
-  <hr>
+<a name="top"></a>
+
+<form>
   <div class="row">
-    <div class="col-sm-6">
-      <button class="btn btn-primary" (click)="export()">Export table as Microsoft Excel (XLSX) file</button>
+    <div class="col-sm-6 custom-file-input-column">
+      <div class="form-group">
+        <input type="file" class="custom-file-input" id="inputFile" (change)="onFileChange($event)">
+        <label class="custom-file-label" for="inputFile">Choose file</label>
+      </div>
     </div>
   </div>
-  <br>
-</div>
-<div class="row">
-  <div class="col-sm-12">
-    <p-table
-      #dataTable
-      selectionMode="multiple"
-      [(selection)]="selectedRows"
-      [columns]="columns"
-      [value]="outputData"
-      [resizableColumns]="true">
-      <ng-template
-        pTemplate="header"
-        let-columns>
-        <tr>
-          <th *ngFor="let column of columns"
-              pResizableColumn
-              [pSortableColumn]="column.field">
-            {{ column.header }}
-            <p-sortIcon [field]="column.field"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
-          </th>
-        </tr>
-        <tr>
-          <th *ngFor="let column of columns">
-            <input pInputText
-                   class="form-control"
-                   type="text"
-                   (input)="dataTable.filter($event.target.value, column.field, 'contains')">
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template
-        pTemplate="body"
-        let-row
-        let-rowIndex="rowIndex">
-        <tr
-          [pSelectableRow]="row"
-          [pSelectableRowIndex]="rowIndex">
-          <td *ngFor="let column of columns">
-            {{ row[column.field] }}
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+
+  <div *ngIf="outputData && outputData.length > 0">
+    <hr>
+    <div class="row">
+      <div class="col-sm-6">
+        <button type="button"
+                class="btn btn-primary"
+                (click)="export()"
+                title="Export table as Microsoft Excel (XLSX) file">
+          Export table as Microsoft Excel (XLSX) file
+        </button>
+        &nbsp;
+        <a class="btn btn-success" href="#pivot-table">Go to pivot table</a>
+      </div>
+    </div>
+    <br>
   </div>
-</div>
-<div  *ngIf="outputData && outputData.length > 0">
-  <br>
+
   <div class="row">
-    <div class="col-sm-6">
-      <button class="btn btn-primary" (click)="export()">Export table as Microsoft Excel (XLSX) file</button>
+    <div class="col-sm-12">
+      <p-table
+        #dataTable
+        selectionMode="multiple"
+        [(selection)]="selectedRows"
+        [columns]="columns"
+        [value]="outputData"
+        [resizableColumns]="true">
+        <ng-template
+          pTemplate="header"
+          let-columns>
+          <tr>
+            <th *ngFor="let column of columns"
+                pResizableColumn
+                [pSortableColumn]="column.field">
+              {{ column.header }}
+              <p-sortIcon [field]="column.field"
+                          ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                          ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+          </tr>
+          <tr>
+            <th *ngFor="let column of columns">
+              <input pInputText
+                     class="form-control"
+                     type="text"
+                     (input)="dataTable.filter($event.target.value, column.field, 'contains')">
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-row
+          let-rowIndex="rowIndex">
+          <tr
+            [pSelectableRow]="row"
+            [pSelectableRowIndex]="rowIndex">
+            <td *ngFor="let column of columns">
+              {{ row[column.field] }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
   </div>
-</div>
+
+  <div  *ngIf="outputData && outputData.length > 0">
+    <br>
+    <div class="row">
+      <div class="col-sm-6">
+        <button type="button"
+                class="btn btn-primary"
+                (click)="export()"
+                title="Export table as Microsoft Excel (XLSX) file">
+          Export table as Microsoft Excel (XLSX) file
+        </button>
+        &nbsp;
+        <a class="btn btn-secondary" href="#top" title="Go to top">Go to top</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+<a name="pivot-table"></a>
+
 <app-pivot-table *ngIf="outputData && outputData.length > 0"
                  [data]="outputData"
+                 [rows]="[]"
                  [columns]="columns"></app-pivot-table>
 

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Column } from '../../model/column';
 
-declare var $: any;
+declare const $: any;
 
 @Component({
   selector: 'app-pivot-table',
@@ -11,6 +11,7 @@ declare var $: any;
 export class PivotTableComponent implements OnInit {
 
   @Input() data: Array<Array<any>>;
+  @Input() rows: Array<Column>;
   @Input() columns: Array<Column>;
 
   constructor(
@@ -29,18 +30,19 @@ export class PivotTableComponent implements OnInit {
       return;
     }
 
-    var container = this._elementRef.nativeElement;
-    var targetElement = $(container).find('#pivot-table');
+    const container = this._elementRef.nativeElement;
+    const targetElement = $(container).find('#pivot-table');
 
     if (!targetElement) {
       return;
     }
 
-    while (targetElement.firstChild) {
-      targetElement.removeChild(targetElement.firstChild);
+    while (targetElement[0].firstChild) {
+      targetElement[0].removeChild(targetElement[0].firstChild);
     }
 
-    const rows = this.columns.map((column) => column.field );
+    const rows = this.rows.map((row) => row.field );
+    const columns = this.columns.map((column) => column.field );
 
     const renderers = $.extend(
       $.pivotUtilities.renderers,
@@ -50,8 +52,11 @@ export class PivotTableComponent implements OnInit {
     targetElement.pivotUI(
       this.data,
       {
-        cols: rows,
+        rows: rows,
+        cols: columns,
         renderers: renderers,
+        rendererName: 'Bar Chart',
+        aggregatorName: 'Sum'
       }
     );
   }

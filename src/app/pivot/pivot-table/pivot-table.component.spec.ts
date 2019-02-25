@@ -8,7 +8,9 @@ describe('PivotTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PivotTableComponent ]
+      declarations: [
+        PivotTableComponent
+      ]
     })
     .compileComponents();
   }));

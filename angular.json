@@ -31,11 +31,9 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.scss",
               "node_modules/c3/c3.min.css",
-              "node_modules/jquery-ui-dist/jquery-ui.structure.min.css",
-              "node_modules/jquery-ui-dist/jquery-ui.theme.min.css",
-              "node_modules/pivottable/dist/pivot.css"
+              "node_modules/pivottable/dist/pivot.css",
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/d3/dist/d3.min.js",
