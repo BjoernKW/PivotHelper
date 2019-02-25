@@ -10,9 +10,32 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <p-table [value]="data">
-        <ng-template pTemplate="body" let-row>
+      <p-table
+        #dataTable
+        selectionMode="multiple"
+        [(selection)]="selectedRows"
+        [columns]="columns"
+        [value]="data"
+        [resizableColumns]="true">
+        <ng-template pTemplate="header" let-columns>
           <tr>
+            <th *ngFor="let column of columns">
+              {{ column }}
+              <p-sortIcon [field]="column.field"
+                          ariaLabel="Activate to sort"
+                          ariaLabelDesc="Activate to sort in descending order"
+                          ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+          </tr>
+          <tr>
+            <th *ngFor="let column of columns">
+              <input pInputText type="text"
+                     (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr [pSelectableRow]="row" [pSelectableRowIndex]="rowIndex">
             <td *ngFor="let column of row">
               {{ column }}
             </td>
@@ -21,6 +44,7 @@
       </p-table>
     </div>
   </div>
+  <br>
   <div class="row">
     <div class="col-md-6">
       <button class="btn btn-primary" (click)="export()">Export</button>
