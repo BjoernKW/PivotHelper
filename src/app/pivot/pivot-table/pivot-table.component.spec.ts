@@ -18,6 +18,8 @@ describe('PivotTableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PivotTableComponent);
     component = fixture.componentInstance;
+    component.data = [];
+    component.data.push([]);
     component.rows = [];
     component.columns = [];
     fixture.detectChanges();
