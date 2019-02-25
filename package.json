@@ -24,6 +24,8 @@
     "bootstrap": "^4.3.1",
     "c3": "^0.6.12",
     "core-js": "^2.5.4",
+    "jquery": "^3.3.1",
+    "jquery-ui-dist": "^1.12.1",
     "pivottable": "^2.23.0",
     "primeicons": "^1.0.0",
     "primeng": "^7.0.5",

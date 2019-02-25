@@ -31,9 +31,19 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/themes/nova-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/c3/c3.min.css",
+              "node_modules/jquery-ui-dist/jquery-ui.structure.min.css",
+              "node_modules/jquery-ui-dist/jquery-ui.theme.min.css",
+              "node_modules/pivottable/dist/pivot.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/c3/c3.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-ui-dist/jquery-ui.min.js",
+              "node_modules/pivottable/dist/pivot.min.js",
+              "node_modules/pivottable/dist/c3_renderers.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -89,7 +99,13 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/c3/c3.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-ui-dist/jquery-ui.min.js",
+              "node_modules/pivottable/dist/pivot.min.js",
+              "node_modules/pivottable/dist/c3_renderers.min.js"
+            ],
             "assets": [
               "src/favicon.ico",
               "src/assets"

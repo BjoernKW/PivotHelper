@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
+import { Column } from '../model/column';
 
 @Component({
   selector: 'app-pivot',
@@ -10,12 +11,8 @@ import { Matrix } from '../model/matrix';
 })
 export class PivotComponent implements OnInit {
 
-  data: Matrix = [];
-  columns = [];
-
-  options: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
-  fileName: string = 'export.xlsx';
-
+  columns: Column[] = [];
+  outputData: {}[] = [];
   selectedRows: [];
 
   constructor() { }
@@ -39,21 +36,62 @@ export class PivotComponent implements OnInit {
       const workSheetName: string = workBook.SheetNames[0];
       const workSheet: XLSX.WorkSheet = workBook.Sheets[workSheetName];
 
-      this.data = <Matrix>(XLSX.utils.sheet_to_json(workSheet, { header: 1 }));
+      let data: Matrix = <Matrix>(XLSX.utils.sheet_to_json(workSheet, { header: 1 }));
 
-      this.columns = this.data[0];
-      this.data = this.data.slice(1, this.data.length - 1);
+      for (const column of data[0]) {
+        const columnName = column.replace(new RegExp('[\"\']', 'g'), '').trim();
+        this.columns.push(
+          {
+            field: columnName,
+            header: columnName,
+            filterMatchMode: 'contains'
+          }
+        );
+      }
+
+      data = data.slice(1, data.length - 1);
+
+      for (const row of data) {
+        const outputRow = {};
+
+        let i = 0;
+        for (const column of this.columns) {
+          const value = isNaN(row[i]) ? row[i].replace(new RegExp('[\"\']', 'g'), '').trim() : row[i];
+          outputRow[column.field] = value;
+
+          i++;
+        }
+
+        this.outputData.push(outputRow);
+      }
     };
 
     reader.readAsBinaryString(target.files[0]);
   }
 
   export(): void {
-    const rows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.data;
-    const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(rows);
+    const rows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.outputData;
+
+    const outputRows = [];
+
+    let outputRow = [];
+    for (const column of this.columns) {
+      outputRow.push(column.field);
+    }
+    outputRows.push(outputRow);
+
+    for (const row of rows) {
+      outputRow = [];
+      for (const column in row) {
+        outputRow.push(row[column]);
+      }
+      outputRows.push(outputRow);
+    }
+
+    const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(outputRows);
     const workBook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet1');
 
-    XLSX.writeFile(workBook, this.fileName);
+    XLSX.writeFile(workBook, 'export.xlsx');
   }
 }
