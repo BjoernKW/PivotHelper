@@ -1,0 +1,29 @@
+<h1>Pivot</h1>
+<form>
+  <div class="row">
+    <div class="col-md-6 custom-file-input-column">
+      <div class="form-group">
+        <input type="file" class="custom-file-input" id="inputFile" (change)="onFileChange($event)">
+        <label class="custom-file-label" for="inputFile">Choose file</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p-table [value]="data">
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td *ngFor="let column of row">
+              {{ column }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <button class="btn btn-primary" (click)="export()">Export</button>
+    </div>
+  </div>
+</form>
