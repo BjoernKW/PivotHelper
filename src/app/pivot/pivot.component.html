@@ -6,6 +6,15 @@
     </div>
   </div>
 </div>
+<div  *ngIf="outputData && outputData.length > 0">
+  <hr>
+  <div class="row">
+    <div class="col-sm-6">
+      <button class="btn btn-primary" (click)="export()">Export table as Microsoft Excel (XLSX) file</button>
+    </div>
+  </div>
+  <br>
+</div>
 <div class="row">
   <div class="col-sm-12">
     <p-table
@@ -53,10 +62,12 @@
     </p-table>
   </div>
 </div>
-<br>
-<div class="row">
-  <div class="col-sm-6">
-    <button class="btn btn-primary" (click)="export()">Export table as Microsoft Excel (XLSX) file</button>
+<div  *ngIf="outputData && outputData.length > 0">
+  <br>
+  <div class="row">
+    <div class="col-sm-6">
+      <button class="btn btn-primary" (click)="export()">Export table as Microsoft Excel (XLSX) file</button>
+    </div>
   </div>
 </div>
 <app-pivot-table *ngIf="outputData && outputData.length > 0"
