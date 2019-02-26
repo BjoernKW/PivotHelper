@@ -95,7 +95,7 @@
 <a name="pivot-table"></a>
 
 <app-pivot-table *ngIf="outputData && outputData.length > 0"
-                 [data]="outputData"
+                 [data]="selectedRows && selectedRows.length > 0 ? selectedRows : outputData"
                  [rows]="[]"
                  [columns]="columns"></app-pivot-table>
 
