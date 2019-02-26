@@ -56,8 +56,8 @@ export class PivotComponent implements OnInit {
 
         let i = 0;
         for (const column of this.columns) {
-          const value = isNaN(row[i]) ? row[i].replace(new RegExp('[\"\']', 'g'), '').trim() : row[i];
-          outputRow[column.field] = value;
+          outputRow[column.field] =
+            isNaN(row[i]) ? row[i].replace(new RegExp('[\"\']', 'g'), '').trim() : row[i];
 
           i++;
         }
