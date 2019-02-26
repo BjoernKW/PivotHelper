@@ -1,5 +1,7 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Column } from '../../model/column';
+import { ChangeNotificationService } from '../change-notification.service';
+import { Subscription } from 'rxjs';
 
 declare const $: any;
 
@@ -8,22 +10,38 @@ declare const $: any;
   templateUrl: './pivot-table.component.html',
   styleUrls: ['./pivot-table.component.scss']
 })
-export class PivotTableComponent implements OnInit {
+export class PivotTableComponent implements OnInit, OnDestroy {
 
-  @Input() data: Array<Array<any>>;
+  @Input() data: {}[];
   @Input() rows: Array<Column>;
   @Input() columns: Array<Column>;
 
+  private _selectionChangedSubscription: Subscription;
+
   constructor(
-    private _elementRef: ElementRef
+    private _elementRef: ElementRef,
+    private _changeNotificationService: ChangeNotificationService
   ) {
   }
 
   ngOnInit() {
-    this.buildPivot();
+    this._changeNotificationService.selectionChanged$.subscribe((data) => {
+      if (data && data.length > 0) {
+        this.data = data;
+        this.buildPivotTableAndChart();
+      }
+    });
+
+    this.buildPivotTableAndChart();
   }
 
-  private buildPivot() {
+  ngOnDestroy(): void {
+    if (this._selectionChangedSubscription) {
+      this._selectionChangedSubscription.unsubscribe();
+    }
+  }
+
+  private buildPivotTableAndChart() {
     if (!this._elementRef ||
       !this._elementRef.nativeElement ||
       !this._elementRef.nativeElement.children) {
@@ -35,10 +53,6 @@ export class PivotTableComponent implements OnInit {
 
     if (!targetElement) {
       return;
-    }
-
-    while (targetElement[0].firstChild) {
-      targetElement[0].removeChild(targetElement[0].firstChild);
     }
 
     const rows = this.rows.map((row) => row.field );

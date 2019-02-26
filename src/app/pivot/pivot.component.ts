@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
 import { Column } from '../model/column';
+import { BehaviorSubject } from 'rxjs';
+import { ChangeNotificationService } from './change-notification.service';
+import { $e } from 'codelyzer/angular/styles/chars';
 
 @Component({
   selector: 'app-pivot',
@@ -15,7 +18,9 @@ export class PivotComponent implements OnInit {
   outputData: {}[] = [];
   selectedRows: [];
 
-  constructor() { }
+  constructor(
+    private _changeNotificationService: ChangeNotificationService
+  ) { }
 
   ngOnInit() {
   }
@@ -39,11 +44,10 @@ export class PivotComponent implements OnInit {
       let data: Matrix = <Matrix>(XLSX.utils.sheet_to_json(workSheet, { header: 1 }));
 
       for (const column of data[0]) {
-        const columnName = column.replace(new RegExp('[\"\']', 'g'), '').trim();
         this.columns.push(
           {
-            field: columnName,
-            header: columnName,
+            field: column,
+            header: column,
             filterMatchMode: 'contains'
           }
         );
@@ -56,8 +60,7 @@ export class PivotComponent implements OnInit {
 
         let i = 0;
         for (const column of this.columns) {
-          outputRow[column.field] =
-            isNaN(row[i]) ? row[i].replace(new RegExp('[\"\']', 'g'), '').trim() : row[i];
+          outputRow[column.field] = row[i];
 
           i++;
         }
@@ -71,7 +74,20 @@ export class PivotComponent implements OnInit {
 
   export(): void {
     const rows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.outputData;
+    const outputRows = this.convertSelectedRows(rows);
 
+    const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(outputRows);
+    const workBook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet1');
+
+    XLSX.writeFile(workBook, 'export.xlsx');
+  }
+
+  onRowSelectionChanged() {
+    this._changeNotificationService.onSelectionChanged(this.selectedRows);
+  }
+
+  private convertSelectedRows(rows: {}[]): [][] {
     const outputRows = [];
 
     let outputRow = [];
@@ -88,10 +104,6 @@ export class PivotComponent implements OnInit {
       outputRows.push(outputRow);
     }
 
-    const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(outputRows);
-    const workBook: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet1');
-
-    XLSX.writeFile(workBook, 'export.xlsx');
+    return outputRows;
   }
 }

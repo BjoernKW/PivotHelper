@@ -35,7 +35,9 @@
         [(selection)]="selectedRows"
         [columns]="columns"
         [value]="outputData"
-        [resizableColumns]="true">
+        [resizableColumns]="true"
+        (onRowSelect)="onRowSelectionChanged()"
+        (onRowUnselect)="onRowSelectionChanged()">
         <ng-template
           pTemplate="header"
           let-columns>
