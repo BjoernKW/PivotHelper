@@ -87,6 +87,10 @@ export class PivotComponent implements OnInit {
     this._changeNotificationService.onSelectionChanged(this.selectedRows);
   }
 
+  onFilterChanged($event: { filters: {}, filteredValue: {}[] }) {
+    this._changeNotificationService.onSelectionChanged($event.filteredValue);
+  }
+
   private convertSelectedRows(rows: {}[]): [][] {
     const outputRows = [];
 

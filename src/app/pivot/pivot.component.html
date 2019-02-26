@@ -37,7 +37,8 @@
         [value]="outputData"
         [resizableColumns]="true"
         (onRowSelect)="onRowSelectionChanged()"
-        (onRowUnselect)="onRowSelectionChanged()">
+        (onRowUnselect)="onRowSelectionChanged()"
+        (onFilter)="onFilterChanged($event)">
         <ng-template
           pTemplate="header"
           let-columns>
@@ -99,5 +100,4 @@
 <app-pivot-table *ngIf="outputData && outputData.length > 0"
                  [data]="selectedRows && selectedRows.length > 0 ? selectedRows : outputData"
                  [rows]="[]"
-                 [columns]="columns"></app-pivot-table>
-
+                 [columns]="[]"></app-pivot-table>
