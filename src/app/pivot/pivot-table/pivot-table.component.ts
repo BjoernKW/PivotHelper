@@ -74,8 +74,10 @@ export class PivotTableComponent implements OnInit, OnDestroy {
       }
     );
 
-    document
-      .querySelector('#pivot-table-buttons')
-      .scrollIntoView();
+    const scrollToElement: Element = document.querySelector('#pivot-table-buttons');
+    if (scrollToElement) {
+      scrollToElement
+        .scrollIntoView();
+    }
   }
 }
