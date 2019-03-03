@@ -73,5 +73,9 @@ export class PivotTableComponent implements OnInit, OnDestroy {
         aggregatorName: 'Sum'
       }
     );
+
+    document
+      .querySelector('#pivot-table-buttons')
+      .scrollIntoView();
   }
 }

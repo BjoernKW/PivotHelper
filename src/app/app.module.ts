@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TableModule } from 'primeng/table';
 import { PivotTableComponent } from './pivot/pivot-table/pivot-table.component';
+import { ProgressSpinnerModule } from "primeng/primeng";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PivotTableComponent } from './pivot/pivot-table/pivot-table.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    TableModule
+    TableModule,
+    ProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

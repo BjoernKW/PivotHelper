@@ -1,6 +1,6 @@
 # PivotHelper
 
-**PivotHelper** is a utility web app that automatically generates Pivot tables and Pivot charts from CSV files or [Microsoft Excel](https://products.office.com/en/excel) spreadsheets.
+**PivotHelper** is a utility web app that generates Pivot tables and charts from CSV files and [Microsoft Excel](https://products.office.com/en/excel) spreadsheets.
 
 ## Usage
 
