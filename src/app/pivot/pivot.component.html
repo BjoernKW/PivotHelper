@@ -5,8 +5,21 @@
     <div class="col-sm-6 custom-file-input-column">
       <div class="form-group">
         <input type="file" class="custom-file-input" id="inputFile" (change)="onFileChange($event)">
-        <label class="custom-file-label" for="inputFile">Choose file</label>
+        <label class="custom-file-label" for="inputFile">Choose CSV (.csv) or Excel (.xls, xlsx) file</label>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <strong>Sample files:</strong>
+      <ul>
+        <li>
+          <a href="https://researchbriefings.files.parliament.uk/documents/CBP-7186/hocl-ge2015-results-summary.csv">UK General Election 2015 Results (.csv)</a>
+        </li>
+        <li>
+          <a href="https://obamawhitehouse.archives.gov/sites/default/files/omb/budget/fy2014/assets/receipts.xls">OMB FY 2014 Federal Receipts (.xls)</a>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -17,8 +30,8 @@
         <button type="button"
                 class="btn btn-primary"
                 (click)="export()"
-                title="Export table as Microsoft Excel (XLSX) file">
-          Export table as Microsoft Excel (XLSX) file
+                title="Export table as Microsoft Excel (.xlsx) file">
+          Export table as Microsoft Excel (.xlsx) file
         </button>
         &nbsp;
         <a class="btn btn-success" href="#pivot-table">Go to pivot table</a>
@@ -85,8 +98,8 @@
         <button type="button"
                 class="btn btn-primary"
                 (click)="export()"
-                title="Export table as Microsoft Excel (XLSX) file">
-          Export table as Microsoft Excel (XLSX) file
+                title="Export table as Microsoft Excel (.xlsx) file">
+          Export table as Microsoft Excel (.xlsx) file
         </button>
         &nbsp;
         <a class="btn btn-secondary" href="#top" title="Go to top">Go to top</a>
