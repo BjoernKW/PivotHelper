@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
@@ -14,9 +14,11 @@ export class PivotComponent implements OnInit {
 
   columns: Column[] = [];
   selectedColumns: Column[];
+  columnsToRemoveFromData: Column[] = [];
   outputData: {}[] = [];
   originalOutputData: {}[];
   selectedRows: [];
+  filteredRows: {}[];
 
   filterMatchModes = [
     { label: 'contains', value: 'contains' },
@@ -31,7 +33,8 @@ export class PivotComponent implements OnInit {
   limitElements: number;
 
   constructor(
-    private _changeNotificationService: ChangeNotificationService
+    private _changeNotificationService: ChangeNotificationService,
+    private _ngZone: NgZone
   ) { }
 
   ngOnInit() {
@@ -162,41 +165,43 @@ export class PivotComponent implements OnInit {
 
       let data: Matrix = <Matrix>(XLSX.utils.sheet_to_json(workSheet, { header: 1 }));
 
-      for (const column of data[0]) {
-        this.columns.push(
-          {
-            field: column,
-            header: column,
-            filterMatchMode: 'contains'
+      this._ngZone.run(() => {
+        for (const column of data[0]) {
+          this.columns.push(
+            {
+              field: column,
+              header: column,
+              filterMatchMode: 'contains'
+            }
+          );
+        }
+        this.selectedColumns = this.columns;
+
+        data = data.slice(1, data.length);
+
+        for (const row of data) {
+          const outputRow = {};
+
+          let i = 0;
+          for (const column of this.columns) {
+            outputRow[column.field] = row[i];
+
+            i++;
           }
-        );
-      }
-      this.selectedColumns = this.columns;
 
-      data = data.slice(1, data.length);
-
-      for (const row of data) {
-        const outputRow = {};
-
-        let i = 0;
-        for (const column of this.columns) {
-          outputRow[column.field] = row[i];
-
-          i++;
+          this.outputData.push(outputRow);
         }
 
-        this.outputData.push(outputRow);
-      }
-
-      this.limitElements = this.outputData.length;
+        this.limitElements = this.outputData.length;
+      });
     };
 
     reader.readAsBinaryString(target.files[0]);
   }
 
   export(): void {
-    const rows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.outputData;
-    const outputRows = this.convertSelectedRows(rows);
+    const targetRows = this.getRowsWithDeselectedColumnsRemoved();
+    const outputRows = this.convertSelectedRows(targetRows);
 
     const workSheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(outputRows);
     const workBook: XLSX.WorkBook = XLSX.utils.book_new();
@@ -210,32 +215,29 @@ export class PivotComponent implements OnInit {
   }
 
   onFilterChanged($event: { filters: {}, filteredValue: {}[] }) {
+    if (Object.keys($event.filters).length > 0) {
+      this.filteredRows = $event.filteredValue;
+    } else {
+      this.filteredRows = null;
+    }
+
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
   }
 
   onColumnSelectionChanged() {
-    const columnsToRemoveFromData: Column[] = [];
+    this.columnsToRemoveFromData = [];
     for (const column of this.columns) {
       if (!this.selectedColumns.includes(column)) {
-        columnsToRemoveFromData.push(column);
+        this.columnsToRemoveFromData.push(column);
       }
     }
 
-    const sourceRows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.outputData;
-    let targetRows: {}[] = JSON.parse(JSON.stringify(sourceRows));
-
-    for (const row of targetRows) {
-      for (const column of columnsToRemoveFromData) {
-        if (row.hasOwnProperty(column.field)) {
-          delete row[column.field];
-        }
-      }
-    }
+    const targetRows = this.getRowsWithDeselectedColumnsRemoved();
 
     this._changeNotificationService.onSelectionChanged(targetRows);
   }
 
-  shopTopElements(value: number) {
+  showTopElements(value: number) {
     if (!this.originalOutputData) {
       this.originalOutputData = this.outputData;
     }
@@ -252,7 +254,7 @@ export class PivotComponent implements OnInit {
     const outputRows = [];
 
     let outputRow = [];
-    for (const column of this.columns) {
+    for (const column of this.selectedColumns) {
       outputRow.push(column.field);
     }
     outputRows.push(outputRow);
@@ -266,5 +268,27 @@ export class PivotComponent implements OnInit {
     }
 
     return outputRows;
+  }
+
+  private getRowsWithDeselectedColumnsRemoved() {
+    let sourceRows = this.outputData;
+    if (this.selectedRows && this.selectedRows.length > 0) {
+      sourceRows = this.selectedRows;
+    }
+    if (this.filteredRows && this.filteredRows.length > 0) {
+      sourceRows = this.filteredRows;
+    }
+
+    let targetRows: {}[] = JSON.parse(JSON.stringify(sourceRows));
+
+    for (const row of targetRows) {
+      for (const column of this.columnsToRemoveFromData) {
+        if (row.hasOwnProperty(column.field)) {
+          delete row[column.field];
+        }
+      }
+    }
+
+    return targetRows;
   }
 }

@@ -73,7 +73,7 @@
                      name="limit-elements"
                      pInputText
                      [(ngModel)]="limitElements"
-                     (input)="shopTopElements($event.target.value)">
+                     (input)="showTopElements($event.target.value)">
             </div>
           </div>
         </ng-template>
@@ -93,13 +93,16 @@
           </tr>
           <tr>
             <th *ngFor="let column of columns">
+              <div class="filter-match-mode-dropdown">
+                <p-dropdown [name]="column.field"
+                            [options]="filterMatchModes"
+                            [(ngModel)]="column.filterMatchMode"
+                            (onChange)="dataTable.filter($event.value, column.field, column.filterMatchMode)"></p-dropdown>
+              </div>
               <input pInputText
                      class="form-control"
                      type="text"
                      (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
-              <p-dropdown [name]="column.field"
-                          [options]="filterMatchModes"
-                          [(ngModel)]="column.filterMatchMode"></p-dropdown>
             </th>
           </tr>
         </ng-template>
