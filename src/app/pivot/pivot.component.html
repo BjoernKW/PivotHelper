@@ -48,12 +48,35 @@
         #dataTable
         selectionMode="multiple"
         [(selection)]="selectedRows"
-        [columns]="columns"
+        [columns]="selectedColumns"
         [value]="outputData"
-        [resizableColumns]="true"
         (onRowSelect)="onRowSelectionChanged()"
         (onRowUnselect)="onRowSelectionChanged()"
         (onFilter)="onFilterChanged($event)">
+        <ng-template pTemplate="caption">
+          <div class="row">
+            <div class="col-sm-10 caption-filter-input">
+              <p-multiSelect id="select-columns"
+                             name="select-columns"
+                             optionLabel="header"
+                             selectedItemsLabel="{0} columns selected"
+                             defaultLabel="Select columns"
+                             (onChange)="onColumnSelectionChanged()"
+                             [options]="columns"
+                             [(ngModel)]="selectedColumns"></p-multiSelect>
+            </div>
+            <div class="col-sm-2 caption-filter-input">
+              <label for="limit-elements">Top</label>
+              &nbsp;
+              <input type="number"
+                     id="limit-elements"
+                     name="limit-elements"
+                     pInputText
+                     [(ngModel)]="limitElements"
+                     (input)="shopTopElements($event.target.value)">
+            </div>
+          </div>
+        </ng-template>
         <ng-template
           pTemplate="header"
           let-columns>
@@ -73,7 +96,10 @@
               <input pInputText
                      class="form-control"
                      type="text"
-                     (input)="dataTable.filter($event.target.value, column.field, 'contains')">
+                     (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
+              <p-dropdown [name]="column.field"
+                          [options]="filterMatchModes"
+                          [(ngModel)]="column.filterMatchMode"></p-dropdown>
             </th>
           </tr>
         </ng-template>
@@ -84,7 +110,7 @@
           <tr
             [pSelectableRow]="row"
             [pSelectableRowIndex]="rowIndex">
-            <td *ngFor="let column of columns">
+            <td *ngFor="let column of selectedColumns">
               {{ row[column.field] }}
             </td>
           </tr>

@@ -13,8 +13,22 @@ import { ChangeNotificationService } from './change-notification.service';
 export class PivotComponent implements OnInit {
 
   columns: Column[] = [];
+  selectedColumns: Column[];
   outputData: {}[] = [];
+  originalOutputData: {}[];
   selectedRows: [];
+
+  filterMatchModes = [
+    { label: 'contains', value: 'contains' },
+    { label: 'starts with', value: 'startsWith' },
+    { label: 'ends with', value: 'endsWith' },
+    { label: 'equals', value: 'equals' },
+    { label: 'doesn\'t equal', value: 'notEquals' },
+    { label: 'less than', value: 'lt' },
+    { label: 'greater than', value: 'gt' }
+  ];
+
+  limitElements: number;
 
   constructor(
     private _changeNotificationService: ChangeNotificationService
@@ -38,7 +52,7 @@ export class PivotComponent implements OnInit {
         }
       );
     }
-
+    this.selectedColumns = this.columns;
 
     this.outputData = [
       {
@@ -122,6 +136,8 @@ export class PivotComponent implements OnInit {
         salesperson: 'Davis'
       }
     ];
+
+    this.limitElements = this.outputData.length;
   }
 
   onFileChange(fileChangeEvent: any) {
@@ -155,6 +171,7 @@ export class PivotComponent implements OnInit {
           }
         );
       }
+      this.selectedColumns = this.columns;
 
       data = data.slice(1, data.length);
 
@@ -170,6 +187,8 @@ export class PivotComponent implements OnInit {
 
         this.outputData.push(outputRow);
       }
+
+      this.limitElements = this.outputData.length;
     };
 
     reader.readAsBinaryString(target.files[0]);
@@ -192,6 +211,41 @@ export class PivotComponent implements OnInit {
 
   onFilterChanged($event: { filters: {}, filteredValue: {}[] }) {
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
+  }
+
+  onColumnSelectionChanged() {
+    const columnsToRemoveFromData: Column[] = [];
+    for (const column of this.columns) {
+      if (!this.selectedColumns.includes(column)) {
+        columnsToRemoveFromData.push(column);
+      }
+    }
+
+    const sourceRows = this.selectedRows && this.selectedRows.length > 0 ? this.selectedRows: this.outputData;
+    let targetRows: {}[] = JSON.parse(JSON.stringify(sourceRows));
+
+    for (const row of targetRows) {
+      for (const column of columnsToRemoveFromData) {
+        if (row.hasOwnProperty(column.field)) {
+          delete row[column.field];
+        }
+      }
+    }
+
+    this._changeNotificationService.onSelectionChanged(targetRows);
+  }
+
+  shopTopElements(value: number) {
+    if (!this.originalOutputData) {
+      this.originalOutputData = this.outputData;
+    }
+    if (this.outputData.length < this.originalOutputData.length) {
+      this.outputData = this.originalOutputData;
+    }
+
+    const limit = value ? value : this.outputData.length;
+
+    this.outputData = this.outputData.slice(0, limit);
   }
 
   private convertSelectedRows(rows: {}[]): [][] {

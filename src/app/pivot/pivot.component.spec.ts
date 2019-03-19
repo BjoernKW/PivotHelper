@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PivotComponent } from './pivot.component';
 import { TableModule } from 'primeng/table';
 import { PivotTableComponent } from "./pivot-table/pivot-table.component";
-import { ProgressSpinnerModule } from "primeng/primeng";
+import { DropdownModule, InputTextModule, MultiSelectModule, ProgressSpinnerModule } from "primeng/primeng";
+import { FormsModule } from "@angular/forms";
 
 describe('PivotComponent', () => {
   let component: PivotComponent;
@@ -16,7 +17,11 @@ describe('PivotComponent', () => {
         PivotTableComponent
       ],
       imports: [
+        FormsModule,
         TableModule,
+        DropdownModule,
+        InputTextModule,
+        MultiSelectModule,
         ProgressSpinnerModule
       ]
     })
