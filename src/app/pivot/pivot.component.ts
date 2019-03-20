@@ -4,6 +4,7 @@ import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
 import { Column } from '../model/column';
 import { ChangeNotificationService } from './change-notification.service';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-pivot',
@@ -33,10 +34,72 @@ export class PivotComponent implements OnInit {
   limitElements: number;
 
   constructor(
-    private _changeNotificationService: ChangeNotificationService
+    private _changeNotificationService: ChangeNotificationService,
+    private _activatedRoute: ActivatedRoute
   ) { }
 
+  private readonly _selectedRows = 'selectedRows';
+  private readonly _selectedColumns = 'selectedColumns';
+  private readonly _columns = 'columns';
+  private readonly _outputData = 'outputData';
+  private readonly _originalOutputData = 'originalOutputData';
+  private readonly _filters = 'filters';
+  private readonly _filteredRows = 'filteredRows';
+  private readonly _limitElements = 'limitElements';
+
+  private readonly _pivotUIRows = 'pivotUIRows';
+  private readonly _pivotUICols = 'pivotUICols';
+  private readonly _pivotUIVals = 'pivotUIVals';
+  private readonly _pivotUIRendererName = 'pivotUIRendererName';
+  private readonly _pivotUIAggregatorName = 'pivotUIAggregatorName';
+
   ngOnInit() {
+    this._activatedRoute.queryParams.subscribe((queryParams) => {
+      if (queryParams[this._selectedRows]) {
+        localStorage.setItem(this._selectedRows, JSON.stringify(JSON.parse(queryParams[this._selectedRows])));
+      }
+
+      if (queryParams[this._selectedColumns]) {
+        localStorage.setItem(this._selectedColumns, JSON.stringify(JSON.parse(queryParams[this._selectedColumns])));
+      }
+      if (queryParams[this._columns]) {
+        localStorage.setItem(this._columns, JSON.stringify(JSON.parse(queryParams[this._columns])));
+      }
+
+      if (queryParams[this._outputData]) {
+        localStorage.setItem(this._outputData, JSON.stringify(JSON.parse(queryParams[this._outputData])));
+      }
+      if (queryParams[this._originalOutputData]) {
+        localStorage.setItem(this._originalOutputData, JSON.stringify(JSON.parse(queryParams[this._originalOutputData])));
+      }
+
+      if (queryParams[this._filters]) {
+        localStorage.setItem(this._filters, JSON.stringify(JSON.parse(queryParams[this._filters])));
+      }
+      if (queryParams[this._filteredRows]) {
+        localStorage.setItem(this._filteredRows, JSON.stringify(JSON.parse(queryParams[this._filteredRows])));
+      }
+
+      if (queryParams[this._limitElements]) {
+        localStorage.setItem(this._limitElements, parseInt(queryParams[this._limitElements]).toString());
+      }
+
+      if (queryParams[this._pivotUIRows]) {
+        localStorage.setItem(this._pivotUIRows, JSON.stringify(JSON.parse(queryParams[this._pivotUIRows])));
+      }
+      if (queryParams[this._pivotUICols]) {
+        localStorage.setItem(this._pivotUICols, JSON.stringify(JSON.parse(queryParams[this._pivotUICols])));
+      }
+      if (queryParams[this._pivotUIVals]) {
+        localStorage.setItem(this._pivotUIVals, JSON.stringify(JSON.parse(queryParams[this._pivotUIVals])));
+      }
+      if (queryParams[this._pivotUIRendererName]) {
+        localStorage.setItem(this._pivotUIRendererName, queryParams[this._pivotUIRendererName]);
+      }
+      if (queryParams[this._pivotUIAggregatorName]) {
+        localStorage.setItem(this._pivotUIAggregatorName, queryParams[this._pivotUIAggregatorName]);
+      }
+    });
     const columnHeaders = [
       'brand',
       'lastYearSale',
@@ -55,6 +118,9 @@ export class PivotComponent implements OnInit {
       );
     }
     this.selectedColumns = this.columns;
+
+    localStorage.setItem(this._selectedColumns, JSON.stringify(this.selectedColumns));
+    localStorage.setItem(this._columns, JSON.stringify(this.columns));
 
     this.outputData = [
       {
@@ -140,11 +206,16 @@ export class PivotComponent implements OnInit {
     ];
 
     this.limitElements = this.outputData.length;
+
+    localStorage.setItem(this._limitElements, this.limitElements.toString());
+    localStorage.setItem(this._outputData, JSON.stringify(this.outputData));
   }
 
   onFileChange(fileChangeEvent: any) {
     this.outputData = [];
     this.selectedRows = [];
+
+    localStorage.setItem(this._selectedRows, JSON.stringify(this.selectedRows));
 
     const target: DataTransfer = <DataTransfer>(fileChangeEvent.target);
 
@@ -175,6 +246,9 @@ export class PivotComponent implements OnInit {
       }
       this.selectedColumns = this.columns;
 
+      localStorage.setItem(this._selectedColumns, JSON.stringify(this.selectedColumns));
+      localStorage.setItem(this._columns, JSON.stringify(this.columns));
+
       data = data.slice(1, data.length);
 
       for (const row of data) {
@@ -191,6 +265,9 @@ export class PivotComponent implements OnInit {
       }
 
       this.limitElements = this.outputData.length;
+
+      localStorage.setItem(this._limitElements, this.limitElements.toString());
+      localStorage.setItem(this._outputData, JSON.stringify(this.outputData));
     };
 
     reader.readAsBinaryString(target.files[0]);
@@ -208,6 +285,8 @@ export class PivotComponent implements OnInit {
   }
 
   onRowSelectionChanged() {
+    localStorage.setItem(this._selectedRows, JSON.stringify(this.selectedRows));
+
     this._changeNotificationService.onSelectionChanged(this.selectedRows);
   }
 
@@ -217,6 +296,9 @@ export class PivotComponent implements OnInit {
     } else {
       this.filteredRows = null;
     }
+
+    localStorage.setItem(this._filters, JSON.stringify($event.filters));
+    localStorage.setItem(this._filteredRows, JSON.stringify(this.filteredRows));
 
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
   }
@@ -228,6 +310,8 @@ export class PivotComponent implements OnInit {
         this.columnsToRemoveFromData.push(column);
       }
     }
+
+    localStorage.setItem(this._selectedColumns, JSON.stringify(this.selectedColumns));
 
     const targetRows = this.getRowsWithDeselectedColumnsRemoved();
 
@@ -245,6 +329,64 @@ export class PivotComponent implements OnInit {
     const limit = value ? value : this.outputData.length;
 
     this.outputData = this.outputData.slice(0, limit);
+
+    localStorage.setItem(this._originalOutputData, JSON.stringify(this.originalOutputData));
+    localStorage.setItem(this._outputData, JSON.stringify(this.outputData));
+  }
+
+  loadFilterConfiguration() {
+    const storedSelectedRows = localStorage.getItem(this._selectedRows);
+    if (storedSelectedRows) {
+      this.selectedRows = JSON.parse(storedSelectedRows);
+
+      this.onRowSelectionChanged();
+    }
+
+    const storedSelectedColumns = localStorage.getItem(this._selectedColumns);
+    if (storedSelectedColumns) {
+      this.selectedColumns = JSON.parse(storedSelectedColumns);
+    }
+    const storedColumns = localStorage.getItem(this._columns);
+    if (storedColumns) {
+      this.columns = JSON.parse(storedColumns);
+    }
+    if (storedSelectedColumns || storedColumns) {
+      this.onColumnSelectionChanged();
+    }
+
+    const storedOutputData = localStorage.getItem(this._outputData);
+    if (storedOutputData) {
+      this.outputData = JSON.parse(storedOutputData);
+    }
+    const storedOriginalOutputData = localStorage.getItem(this._originalOutputData);
+    if (storedOriginalOutputData) {
+      this.originalOutputData = JSON.parse(storedOriginalOutputData);
+    }
+
+    let filters: {};
+    const storedFilters = localStorage.getItem(this._filters);
+    if (storedFilters) {
+      filters = JSON.parse(storedFilters);
+    }
+    const storedFilteredRows = localStorage.getItem(this._filteredRows);
+    if (storedFilteredRows) {
+      this.filteredRows = JSON.parse(storedFilteredRows);
+    }
+    if (filters && this.filteredRows) {
+      this.onFilterChanged({ filters: filters, filteredValue: this.filteredRows });
+    }
+
+    const storedLimitElements = localStorage.getItem(this._limitElements);
+    if (storedLimitElements) {
+      this.limitElements = parseInt(storedLimitElements);
+
+      this.showTopElements(this.limitElements);
+    }
+  }
+
+  resetConfiguration() {
+    localStorage.clear();
+    location.reload();
   }
 
   private convertSelectedRows(rows: {}[]): [][] {

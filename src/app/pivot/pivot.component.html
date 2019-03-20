@@ -27,7 +27,7 @@
   <div *ngIf="outputData && outputData.length > 0">
     <hr>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <button type="button"
                 class="btn btn-primary"
                 (click)="export()"
@@ -36,6 +36,20 @@
         </button>
         &nbsp;
         <a class="btn btn-success" href="#pivot-table-buttons">Go to pivot table</a>
+        &nbsp;
+        <button type="button"
+                class="btn btn-warning"
+                (click)="loadFilterConfiguration()"
+                title="Load filer configuration">
+          Load filter configuration
+        </button>
+        &nbsp;
+        <button type="button"
+                class="btn btn-danger"
+                (click)="resetConfiguration()"
+                title="Reset configuration">
+          Reset configuration
+        </button>
       </div>
     </div>
     <br>
