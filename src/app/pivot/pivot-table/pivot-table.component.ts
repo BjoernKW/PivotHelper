@@ -18,6 +18,12 @@ export class PivotTableComponent implements OnInit, OnDestroy {
 
   private _selectionChangedSubscription: Subscription;
 
+  private readonly _pivotUIRows = 'pivotUIRows';
+  private readonly _pivotUICols = 'pivotUICols';
+  private readonly _pivotUIVals = 'pivotUIVals';
+  private readonly _pivotUIRendererName = 'pivotUIRendererName';
+  private readonly _pivotUIAggregatorName = 'pivotUIAggregatorName';
+
   constructor(
     private _elementRef: ElementRef,
     private _changeNotificationService: ChangeNotificationService
@@ -55,23 +61,64 @@ export class PivotTableComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const rows = this.rows.map((row) => row.field );
-    const columns = this.columns.map((column) => column.field );
+    let rows = this.rows.map((row) => row.field );
+    let columns = this.columns.map((column) => column.field );
+    let vals: string[] = [];
 
     const renderers = $.extend(
       $.pivotUtilities.renderers,
       $.pivotUtilities.c3_renderers
     );
 
+    let rendererName = 'Bar Chart';
+    let aggregatorName = 'Sum';
+
+    const storedRows = localStorage.getItem(this._pivotUIRows);
+    if (storedRows) {
+      rows = JSON.parse(storedRows);
+    }
+    const storedColumns = localStorage.getItem(this._pivotUICols);
+    if (storedColumns) {
+      columns = JSON.parse(storedColumns);
+    }
+    const storedVals = localStorage.getItem(this._pivotUIVals);
+    if (storedVals) {
+      vals = JSON.parse(storedVals);
+    }
+    const storedRendererName = localStorage.getItem(this._pivotUIRendererName);
+    if (storedRendererName) {
+      rendererName = storedRendererName;
+    }
+    const storedAggregatorName = localStorage.getItem(this._pivotUIAggregatorName);
+    if (storedAggregatorName) {
+      aggregatorName = storedAggregatorName;
+    }
+
+    const pivotUIRows = this._pivotUIRows;
+    const pivotUICols = this._pivotUICols;
+    const pivotUIVals = this._pivotUIVals;
+    const pivotUIRendererName = this._pivotUIRendererName;
+    const pivotUIAggregatorName = this._pivotUIAggregatorName;
+
+    let pivotUIConfig = {
+      rows: rows,
+      cols: columns,
+      vals: vals,
+      renderers: renderers,
+      rendererName: rendererName,
+      aggregatorName: aggregatorName,
+      onRefresh: function(config) {
+        localStorage.setItem(pivotUIRows, JSON.stringify(config.rows));
+        localStorage.setItem(pivotUICols, JSON.stringify(config.cols));
+        localStorage.setItem(pivotUIVals, JSON.stringify(config.vals));
+        localStorage.setItem(pivotUIRendererName, config.rendererName);
+        localStorage.setItem(pivotUIAggregatorName, config.aggregatorName);
+      }
+    };
+
     targetElement.pivotUI(
       this.data,
-      {
-        rows: rows,
-        cols: columns,
-        renderers: renderers,
-        rendererName: 'Bar Chart',
-        aggregatorName: 'Sum'
-      }
+      pivotUIConfig
     );
 
     const scrollToElement: Element = document.querySelector('#pivot-table-buttons');

@@ -4,6 +4,8 @@ import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
 import { Column } from '../model/column';
 import { ChangeNotificationService } from './change-notification.service';
+import { ActivatedRoute } from "@angular/router";
+import { PlatformLocation } from "@angular/common";
 
 @Component({
   selector: 'app-pivot',
@@ -32,11 +34,40 @@ export class PivotComponent implements OnInit {
 
   limitElements: number;
 
+  displayShareDialog = false;
+  urlForSharing: string;
+
+  private readonly _pivotUIRows = 'pivotUIRows';
+  private readonly _pivotUICols = 'pivotUICols';
+  private readonly _pivotUIVals = 'pivotUIVals';
+  private readonly _pivotUIRendererName = 'pivotUIRendererName';
+  private readonly _pivotUIAggregatorName = 'pivotUIAggregatorName';
+
   constructor(
-    private _changeNotificationService: ChangeNotificationService
+    private _changeNotificationService: ChangeNotificationService,
+    private _activatedRoute: ActivatedRoute,
+    private _platformLocation: PlatformLocation
   ) { }
 
   ngOnInit() {
+    this._activatedRoute.queryParams.subscribe((queryParams) => {
+      if (queryParams[this._pivotUIRows]) {
+        localStorage.setItem(this._pivotUIRows, JSON.stringify(JSON.parse(queryParams[this._pivotUIRows])));
+      }
+      if (queryParams[this._pivotUICols]) {
+        localStorage.setItem(this._pivotUICols, JSON.stringify(JSON.parse(queryParams[this._pivotUICols])));
+      }
+      if (queryParams[this._pivotUIVals]) {
+        localStorage.setItem(this._pivotUIVals, JSON.stringify(JSON.parse(queryParams[this._pivotUIVals])));
+      }
+      if (queryParams[this._pivotUIRendererName]) {
+        localStorage.setItem(this._pivotUIRendererName, queryParams[this._pivotUIRendererName]);
+      }
+      if (queryParams[this._pivotUIAggregatorName]) {
+        localStorage.setItem(this._pivotUIAggregatorName, queryParams[this._pivotUIAggregatorName]);
+      }
+    });
+
     const columnHeaders = [
       'brand',
       'lastYearSale',
@@ -245,6 +276,28 @@ export class PivotComponent implements OnInit {
     const limit = value ? value : this.outputData.length;
 
     this.outputData = this.outputData.slice(0, limit);
+  }
+
+  displayShareCurrentPivotTableConfigurationDialog() {
+    this.urlForSharing = `${location.protocol}//${location.host}${this._platformLocation.getBaseHrefFromDOM()}`
+      + `?${this._pivotUIRows}=${encodeURIComponent(localStorage.getItem(this._pivotUIRows))}`
+      + `&${this._pivotUICols}=${encodeURIComponent(localStorage.getItem(this._pivotUICols))}`
+      + `&${this._pivotUIVals}=${encodeURIComponent(localStorage.getItem(this._pivotUIVals))}`
+      + `&${this._pivotUIRendererName}=${encodeURIComponent(localStorage.getItem(this._pivotUIRendererName))}`
+      + `&${this._pivotUIAggregatorName}=${encodeURIComponent(localStorage.getItem(this._pivotUIAggregatorName))}`;
+
+    this.displayShareDialog = true;
+  }
+
+  copyURLToClipboard(inputElementWithURL: HTMLInputElement) {
+    inputElementWithURL.select();
+    document.execCommand('copy');
+    inputElementWithURL.setSelectionRange(0, inputElementWithURL.value.length);
+  }
+
+  resetPivotTableConfiguration() {
+    localStorage.clear();
+    location.reload();
   }
 
   private convertSelectedRows(rows: {}[]): [][] {
