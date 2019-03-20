@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
@@ -33,8 +33,7 @@ export class PivotComponent implements OnInit {
   limitElements: number;
 
   constructor(
-    private _changeNotificationService: ChangeNotificationService,
-    private _ngZone: NgZone
+    private _changeNotificationService: ChangeNotificationService
   ) { }
 
   ngOnInit() {
@@ -144,7 +143,6 @@ export class PivotComponent implements OnInit {
   }
 
   onFileChange(fileChangeEvent: any) {
-    this.columns = [];
     this.outputData = [];
     this.selectedRows = [];
 
@@ -165,35 +163,34 @@ export class PivotComponent implements OnInit {
 
       let data: Matrix = <Matrix>(XLSX.utils.sheet_to_json(workSheet, { header: 1 }));
 
-      this._ngZone.run(() => {
-        for (const column of data[0]) {
-          this.columns.push(
-            {
-              field: column,
-              header: column,
-              filterMatchMode: 'contains'
-            }
-          );
-        }
-        this.selectedColumns = this.columns;
-
-        data = data.slice(1, data.length);
-
-        for (const row of data) {
-          const outputRow = {};
-
-          let i = 0;
-          for (const column of this.columns) {
-            outputRow[column.field] = row[i];
-
-            i++;
+      this.columns = [];
+      for (const column of data[0]) {
+        this.columns.push(
+          {
+            field: column,
+            header: column,
+            filterMatchMode: 'contains'
           }
+        );
+      }
+      this.selectedColumns = this.columns;
 
-          this.outputData.push(outputRow);
+      data = data.slice(1, data.length);
+
+      for (const row of data) {
+        const outputRow = {};
+
+        let i = 0;
+        for (const column of this.columns) {
+          outputRow[column.field] = row[i];
+
+          i++;
         }
 
-        this.limitElements = this.outputData.length;
-      });
+        this.outputData.push(outputRow);
+      }
+
+      this.limitElements = this.outputData.length;
     };
 
     reader.readAsBinaryString(target.files[0]);
