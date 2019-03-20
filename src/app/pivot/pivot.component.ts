@@ -67,6 +67,7 @@ export class PivotComponent implements OnInit {
         localStorage.setItem(this._pivotUIAggregatorName, queryParams[this._pivotUIAggregatorName]);
       }
     });
+
     const columnHeaders = [
       'brand',
       'lastYearSale',

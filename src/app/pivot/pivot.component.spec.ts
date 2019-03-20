@@ -12,6 +12,8 @@ import {
 } from "primeng/primeng";
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
+import { ActivatedRoute } from "@angular/router";
+import { of } from "rxjs";
 
 describe('PivotComponent', () => {
   let component: PivotComponent;
@@ -32,6 +34,17 @@ describe('PivotComponent', () => {
         ProgressSpinnerModule,
         RouterTestingModule,
         DialogModule
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of({
+              pivotUIRendererName: 'Stacked Bar Chart',
+              pivotUIAggregatorName: 'Median'
+            })
+          }
+        }
       ]
     })
     .compileComponents();
@@ -45,5 +58,10 @@ describe('PivotComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have pivot table settings from URL query parameters', () => {
+    expect(localStorage.getItem('pivotUIRendererName')).toBe('Stacked Bar Chart');
+    expect(localStorage.getItem('pivotUIAggregatorName')).toBe('Median');
   });
 });
