@@ -276,6 +276,8 @@ export class PivotComponent implements OnInit {
     const limit = value ? value : this.outputData.length;
 
     this.outputData = this.outputData.slice(0, limit);
+
+    this._changeNotificationService.onSelectionChanged(this.outputData);
   }
 
   displayShareCurrentPivotTableConfigurationDialog() {
