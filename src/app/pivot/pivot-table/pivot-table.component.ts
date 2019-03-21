@@ -4,6 +4,7 @@ import { ChangeNotificationService } from '../change-notification.service';
 import { Subscription } from 'rxjs';
 
 declare const $: any;
+declare const saveSvgAsPng: any;
 
 @Component({
   selector: 'app-pivot-table',
@@ -23,6 +24,45 @@ export class PivotTableComponent implements OnInit, OnDestroy {
   private readonly _pivotUIVals = 'pivotUIVals';
   private readonly _pivotUIRendererName = 'pivotUIRendererName';
   private readonly _pivotUIAggregatorName = 'pivotUIAggregatorName';
+
+  private static serializeSVGContent(svgElement) {
+    const serializer = new XMLSerializer();
+    let source = serializer.serializeToString(svgElement);
+
+    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+      source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+      source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(source);
+  }
+
+  private static getSvgElement() {
+    const svgElements: HTMLCollectionOf<SVGSVGElement> = document.getElementsByTagName('svg');
+    let svgElement: SVGSVGElement;
+
+    if (svgElements && svgElements.length > 0) {
+      svgElement = svgElements[0];
+    }
+    return svgElement;
+  }
+
+  private static triggerDownload(dataURL: string, chartFilename: string) {
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(dataURL, chartFilename);
+      return;
+    } else {
+      const a = window.document.createElement('a');
+      a.href = dataURL;
+      a.download = chartFilename;
+      document.body.appendChild(a);
+      a.click();  // IE: "Access is denied"; see: https://connect.microsoft.com/IE/feedback/details/797361/ie-10-treats-blob-url-as-cross-origin-and-denies-access
+      document.body.removeChild(a);
+    }
+  }
 
   constructor(
     private _elementRef: ElementRef,
@@ -45,6 +85,22 @@ export class PivotTableComponent implements OnInit, OnDestroy {
     if (this._selectionChangedSubscription) {
       this._selectionChangedSubscription.unsubscribe();
     }
+  }
+
+  exportCurrentChartAsSVGFile(): void {
+    const svgElement = PivotTableComponent.getSvgElement();
+
+    if (svgElement) {
+      const dataURL = PivotTableComponent.serializeSVGContent(svgElement);
+      const chartFilename = 'chart.svg';
+
+      PivotTableComponent.triggerDownload(dataURL, chartFilename);
+    }
+  }
+
+  exportCurrentChartAsPNGFile(): void {
+    const svgElement = PivotTableComponent.getSvgElement();
+    saveSvgAsPng(svgElement, 'chart.png');
   }
 
   private buildPivotTableAndChart() {

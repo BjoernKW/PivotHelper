@@ -4,5 +4,23 @@
   <div class="col-sm-12">
     <em>Please drag and drop the column labels in order to define pivot rows and columns.</em><br>
     <div id="pivot-table"></div>
+    <br>
+    <div class="row">
+      <div class="col-sm-12">
+        <button type="button"
+                class="btn btn-sm btn-info"
+                (click)="exportCurrentChartAsSVGFile()"
+                title="Export chart as SVG file">
+          Export chart as SVG file
+        </button>
+        &nbsp;
+        <button type="button"
+                class="btn btn-sm btn-info"
+                (click)="exportCurrentChartAsPNGFile()"
+                title="Export chart as PNG file">
+          Export chart as PNG file
+        </button>
+      </div>
+    </div>
   </div>
 </div>
