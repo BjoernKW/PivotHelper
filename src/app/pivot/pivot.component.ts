@@ -4,8 +4,8 @@ import * as XLSX from 'xlsx';
 import { Matrix } from '../model/matrix';
 import { Column } from '../model/column';
 import { ChangeNotificationService } from './change-notification.service';
-import { ActivatedRoute } from "@angular/router";
-import { PlatformLocation } from "@angular/common";
+import { ActivatedRoute } from '@angular/router';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-pivot',
@@ -32,10 +32,19 @@ export class PivotComponent implements OnInit {
     { label: 'greater than', value: 'gt' }
   ];
 
+  booleanDropdownValues = [
+    { label: 'all', value: undefined },
+    { label: 'true', value: true },
+    { label: 'false', value: false }
+  ];
+
   limitElements: number;
 
   displayShareDialog = false;
   urlForSharing: string;
+
+  private _emailPattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  private _httpUrlPattern = /^http[s]{0,1}:/;
 
   private readonly _pivotUIRows = 'pivotUIRows';
   private readonly _pivotUICols = 'pivotUICols';
@@ -74,14 +83,22 @@ export class PivotComponent implements OnInit {
       'thisYearSale',
       'lastYearProfit',
       'thisYearProfit',
-      'salesperson'
+      'salesperson',
+      'eligible',
+      'accountEmailAddress',
+      'accountUrl',
+      'numberOfRetailOutlets'
     ];
     for (const column of columnHeaders) {
       this.columns.push(
         {
           field: column,
           header: column,
-          filterMatchMode: 'contains'
+          filterMatchMode: 'contains',
+          isBoolean: true,
+          isNumeric: true,
+          isEmailAddress: true,
+          isHttpUrl: true
         }
       );
     }
@@ -94,7 +111,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '40%',
         lastYearProfit: '$54,406.00',
         thisYearProfit: '$43,342',
-        salesperson: 'Smith'
+        salesperson: 'Smith',
+        eligible: true,
+        accountEmailAddress: 'someone@apple.com',
+        accountUrl: 'https://apple.com',
+        numberOfRetailOutlets: 10
       },
       {
         brand: 'Samsung',
@@ -102,7 +123,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '96%',
         lastYearProfit: '$423,132',
         thisYearProfit: '$312,122',
-        salesperson: 'Johnson'
+        salesperson: 'Johnson',
+        eligible: false,
+        accountEmailAddress: 'someone@samsung.com',
+        accountUrl: 'https://apple.com',
+        numberOfRetailOutlets: 8
       },
       {
         brand: 'Microsoft',
@@ -110,7 +135,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '5%',
         lastYearProfit: '$12,321',
         thisYearProfit: '$8,500',
-        salesperson: 'Smith'
+        salesperson: 'Smith',
+        eligible: 'true',
+        accountEmailAddress: 'someone@microsoft.com',
+        accountUrl: 'https://apple.com',
+        numberOfRetailOutlets: 20
       },
       {
         brand: 'Philips',
@@ -118,7 +147,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '22%',
         lastYearProfit: '$745,232',
         thisYearProfit: '$650,323',
-        salesperson: 'Johnson'
+        salesperson: 'Johnson',
+        eligible: 'false',
+        accountEmailAddress: 'someone@philips.com',
+        accountUrl: 'https://philips.com',
+        numberOfRetailOutlets: 10
       },
       {
         brand: 'Song',
@@ -126,7 +159,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '79%',
         lastYearProfit: '$643,242',
         thisYearProfit: '500,332',
-        salesperson: 'Smith'
+        salesperson: 'Smith',
+        eligible: true,
+        accountEmailAddress: 'someone@song.com',
+        accountUrl: 'https://song.com',
+        numberOfRetailOutlets: 10
       },
       {
         brand: 'LG',
@@ -134,7 +171,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: ' 65%',
         lastYearProfit: '$421,132',
         thisYearProfit: '$150,005',
-        salesperson: 'Jones'
+        salesperson: 'Jones',
+        eligible: true,
+        accountEmailAddress: 'someone@lg.com',
+        accountUrl: 'https://lg.com',
+        numberOfRetailOutlets: 10
       },
       {
         brand: 'Sharp',
@@ -142,7 +183,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '12%',
         lastYearProfit: '$131,211',
         thisYearProfit: '$100,214',
-        salesperson: 'Jones'
+        salesperson: 'Jones',
+        eligible: 0,
+        accountEmailAddress: 'someone@sharp.com',
+        accountUrl: 'http://sharp.com',
+        numberOfRetailOutlets: 5
       },
       {
         brand: 'Panasonic',
@@ -150,7 +195,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '45%',
         lastYearProfit: '$66,442',
         thisYearProfit: '$53,322',
-        salesperson: 'Williams'
+        salesperson: 'Williams',
+        eligible: 1,
+        accountEmailAddress: 'someone@panasonic.com',
+        accountUrl: 'https://panasonic.com',
+        numberOfRetailOutlets: 10
       },
       {
         brand: 'HTC',
@@ -158,7 +207,11 @@ export class PivotComponent implements OnInit {
         thisYearSale: '56%',
         lastYearProfit: '$765,442',
         thisYearProfit: '$296,232',
-        salesperson: 'Davis'
+        salesperson: 'Davis',
+        eligible: false,
+        accountEmailAddress: 'someone@htc.com',
+        accountUrl: 'https://htc.com',
+        numberOfRetailOutlets: 20
       },
       {
         brand: 'Toshiba',
@@ -166,14 +219,26 @@ export class PivotComponent implements OnInit {
         thisYearSale: '54%',
         lastYearProfit: '$21,212',
         thisYearProfit: '$12,533',
-        salesperson: 'Davis'
+        salesperson: 'Davis',
+        eligible: true,
+        accountEmailAddress: 'someone@toshiba.com',
+        accountUrl: 'http://toshiba.com',
+        numberOfRetailOutlets: 2
       }
     ];
 
+    for (const row of this.outputData) {
+      for (const column of this.columns) {
+        this.getColumnWithDataType(row[column.field], column, row);
+      }
+    }
+
     this.limitElements = this.outputData.length;
+
+    this.preselectFilterMatchModes();
   }
 
-  onFileChange(fileChangeEvent: any) {
+  onFileChange(fileChangeEvent: any): void {
     this.outputData = [];
     this.selectedRows = [];
 
@@ -200,7 +265,11 @@ export class PivotComponent implements OnInit {
           {
             field: column,
             header: column,
-            filterMatchMode: 'contains'
+            filterMatchMode: 'contains',
+            isBoolean: true,
+            isNumeric: true,
+            isEmailAddress: true,
+            isHttpUrl: true
           }
         );
       }
@@ -214,6 +283,7 @@ export class PivotComponent implements OnInit {
         let i = 0;
         for (const column of this.columns) {
           outputRow[column.field] = row[i];
+          this.getColumnWithDataType(row[i], column, outputRow);
 
           i++;
         }
@@ -222,6 +292,8 @@ export class PivotComponent implements OnInit {
       }
 
       this.limitElements = this.outputData.length;
+
+      this.preselectFilterMatchModes();
     };
 
     reader.readAsBinaryString(target.files[0]);
@@ -238,11 +310,11 @@ export class PivotComponent implements OnInit {
     XLSX.writeFile(workBook, 'export.xlsx');
   }
 
-  onRowSelectionChanged() {
+  onRowSelectionChanged(): void {
     this._changeNotificationService.onSelectionChanged(this.selectedRows);
   }
 
-  onFilterChanged($event: { filters: {}, filteredValue: {}[] }) {
+  onFilterChanged($event: { filters: {}, filteredValue: {}[] }): void {
     if (Object.keys($event.filters).length > 0) {
       this.filteredRows = $event.filteredValue;
     } else {
@@ -252,7 +324,7 @@ export class PivotComponent implements OnInit {
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
   }
 
-  onColumnSelectionChanged() {
+  onColumnSelectionChanged(): void {
     this.columnsToRemoveFromData = [];
     for (const column of this.columns) {
       if (!this.selectedColumns.includes(column)) {
@@ -265,7 +337,7 @@ export class PivotComponent implements OnInit {
     this._changeNotificationService.onSelectionChanged(targetRows);
   }
 
-  showTopElements(value: number) {
+  showTopElements(value: number): void {
     if (!this.originalOutputData) {
       this.originalOutputData = this.outputData;
     }
@@ -280,7 +352,7 @@ export class PivotComponent implements OnInit {
     this._changeNotificationService.onSelectionChanged(this.outputData);
   }
 
-  displayShareCurrentPivotTableConfigurationDialog() {
+  displayShareCurrentPivotTableConfigurationDialog(): void {
     this.urlForSharing = `${location.protocol}//${location.host}${this._platformLocation.getBaseHrefFromDOM()}`
       + `?${this._pivotUIRows}=${encodeURIComponent(localStorage.getItem(this._pivotUIRows))}`
       + `&${this._pivotUICols}=${encodeURIComponent(localStorage.getItem(this._pivotUICols))}`
@@ -291,15 +363,31 @@ export class PivotComponent implements OnInit {
     this.displayShareDialog = true;
   }
 
-  copyURLToClipboard(inputElementWithURL: HTMLInputElement) {
+  copyURLToClipboard(inputElementWithURL: HTMLInputElement): void {
     inputElementWithURL.select();
     document.execCommand('copy');
     inputElementWithURL.setSelectionRange(0, inputElementWithURL.value.length);
   }
 
-  resetPivotTableConfiguration() {
+  resetPivotTableConfiguration(): void {
     localStorage.clear();
     location.reload();
+  }
+
+  getInputFieldTypeForColumn(column: Column): string {
+    if (column.isNumeric) {
+      return 'number';
+    }
+
+    if (column.isEmailAddress) {
+      return 'email'
+    }
+
+    if (column.isHttpUrl) {
+      return 'url'
+    }
+
+    return 'text';
   }
 
   private convertSelectedRows(rows: {}[]): [][] {
@@ -322,7 +410,7 @@ export class PivotComponent implements OnInit {
     return outputRows;
   }
 
-  private getRowsWithDeselectedColumnsRemoved() {
+  private getRowsWithDeselectedColumnsRemoved(): {}[] {
     let sourceRows = this.outputData;
     if (this.selectedRows && this.selectedRows.length > 0) {
       sourceRows = this.selectedRows;
@@ -342,5 +430,36 @@ export class PivotComponent implements OnInit {
     }
 
     return targetRows;
+  }
+
+  private getColumnWithDataType(value: any, column: Column, outputRow: {}): void {
+    let interpretedValue = value;
+
+    if (column.isBoolean || column.isNumeric) {
+      try {
+        interpretedValue = JSON.parse(value);
+
+        column.isBoolean = column.isBoolean && !!interpretedValue == interpretedValue;
+        column.isNumeric = !column.isBoolean && column.isNumeric && !isNaN(interpretedValue);
+      } catch (error) {
+        column.isBoolean = false;
+        column.isNumeric = false;
+      }
+    }
+
+    column.isEmailAddress = column.isEmailAddress && this._emailPattern.test(interpretedValue);
+    column.isHttpUrl = column.isHttpUrl && this._httpUrlPattern.test(interpretedValue);
+
+    if (column.isBoolean || column.isNumeric || column.isEmailAddress) {
+      outputRow[column.field] = interpretedValue;
+    }
+  }
+
+  private preselectFilterMatchModes(): void {
+    for (const column of this.columns) {
+      if (column.isBoolean) {
+        column.filterMatchMode = 'equals'
+      }
+    }
   }
 }

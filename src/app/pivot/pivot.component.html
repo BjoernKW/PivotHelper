@@ -141,14 +141,21 @@
             <th *ngFor="let column of columns">
               <div class="filter-match-mode-dropdown">
                 <p-dropdown [name]="column.field"
+                            [readonly]="column.isBoolean"
+                            [disabled]="column.isBoolean"
                             [options]="filterMatchModes"
                             [(ngModel)]="column.filterMatchMode"
                             (onChange)="dataTable.filter($event.value, column.field, column.filterMatchMode)"></p-dropdown>
               </div>
-              <input pInputText
+              <input *ngIf="!column.isBoolean; else booleanDropdown"
+                     pInputText
                      class="form-control"
-                     type="text"
+                     [type]="getInputFieldTypeForColumn(column)"
                      (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
+              <ng-template #booleanDropdown>
+                <p-dropdown [options]="booleanDropdownValues"
+                            (onChange)="dataTable.filter($event.value, column.field, column.filterMatchMode)"></p-dropdown>
+              </ng-template>
             </th>
           </tr>
         </ng-template>
@@ -160,7 +167,19 @@
             [pSelectableRow]="row"
             [pSelectableRowIndex]="rowIndex">
             <td *ngFor="let column of selectedColumns">
-              {{ row[column.field] }}
+              <input *ngIf="column.isBoolean"
+                     type="checkbox"
+                     disabled
+                     [checked]="row[column.field]">
+              <span *ngIf="column.isEmailAddress">
+                <a href="mailto:{{ row[column.field] }}">{{ row[column.field] }}</a>
+              </span>
+              <span *ngIf="column.isHttpUrl">
+                <a [href]="row[column.field]" target="_blank">{{ row[column.field] }}</a>
+              </span>
+              <span *ngIf="!(column.isBoolean || column.isEmailAddress || column.isHttpUrl)">
+                {{ row[column.field] }}
+              </span>
             </td>
           </tr>
         </ng-template>

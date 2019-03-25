@@ -47,7 +47,7 @@ describe('PivotComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -58,6 +58,176 @@ describe('PivotComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should properly initialise column data types', () => {
+    expect(component.selectedColumns).toEqual([
+      {
+        "field": "brand",
+        "header": "brand",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "lastYearSale",
+        "header": "lastYearSale",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "thisYearSale",
+        "header": "thisYearSale",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "lastYearProfit",
+        "header": "lastYearProfit",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "thisYearProfit",
+        "header": "thisYearProfit",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "salesperson",
+        "header": "salesperson",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "eligible",
+        "header": "eligible",
+        "filterMatchMode": "equals",
+        "isBoolean": true,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "accountEmailAddress",
+        "header": "accountEmailAddress",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": true,
+        "isHttpUrl": false
+      }, {
+        "field": "accountUrl",
+        "header": "accountUrl",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": true
+      }, {
+        "field": "numberOfRetailOutlets",
+        "header": "numberOfRetailOutlets",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": true,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }
+    ]);
+
+    expect(component.selectedColumns).toEqual([
+      {
+        "field": "brand",
+        "header": "brand",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "lastYearSale",
+        "header": "lastYearSale",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "thisYearSale",
+        "header": "thisYearSale",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "lastYearProfit",
+        "header": "lastYearProfit",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "thisYearProfit",
+        "header": "thisYearProfit",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "salesperson",
+        "header": "salesperson",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "eligible",
+        "header": "eligible",
+        "filterMatchMode": "equals",
+        "isBoolean": true,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }, {
+        "field": "accountEmailAddress",
+        "header": "accountEmailAddress",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": true,
+        "isHttpUrl": false
+      }, {
+        "field": "accountUrl",
+        "header": "accountUrl",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": false,
+        "isEmailAddress": false,
+        "isHttpUrl": true
+      }, {
+        "field": "numberOfRetailOutlets",
+        "header": "numberOfRetailOutlets",
+        "filterMatchMode": "contains",
+        "isBoolean": false,
+        "isNumeric": true,
+        "isEmailAddress": false,
+        "isHttpUrl": false
+      }
+    ]);
   });
 
   it('should have pivot table settings from URL query parameters', () => {
