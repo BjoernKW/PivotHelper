@@ -3,8 +3,9 @@ import { Column } from '../../model/column';
 import { ChangeNotificationService } from '../change-notification.service';
 import { Subscription } from 'rxjs';
 
-declare const $: any;
-declare const saveSvgAsPng: any;
+import * as $ from 'jquery';
+import * as pivotUtilities from 'pivottable';
+import * as saveSvgAsPng from 'save-svg-as-png'
 
 @Component({
   selector: 'app-pivot-table',
@@ -68,6 +69,7 @@ export class PivotTableComponent implements OnInit, OnDestroy {
     private _elementRef: ElementRef,
     private _changeNotificationService: ChangeNotificationService
   ) {
+    $.pivotUtilities = pivotUtilities;
   }
 
   ngOnInit() {
