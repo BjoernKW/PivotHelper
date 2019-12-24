@@ -14,7 +14,7 @@ import {
   InputTextModule,
   MultiSelectModule,
   ProgressSpinnerModule
-} from "primeng/primeng";
+} from "primeng";
 import { FormsModule } from "@angular/forms";
 
 @NgModule({

@@ -9,7 +9,7 @@ import {
   InputTextModule,
   MultiSelectModule,
   ProgressSpinnerModule
-} from "primeng/primeng";
+} from "primeng";
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ActivatedRoute } from "@angular/router";
