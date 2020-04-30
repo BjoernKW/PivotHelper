@@ -25,7 +25,7 @@
     "c3": "^0.7.11",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.0",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "jquery-ui-dist": "^1.12.1",
     "pivottable": "^2.23.0",
     "popper.js": "^1.16.0",
