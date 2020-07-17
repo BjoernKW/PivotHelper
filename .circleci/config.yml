@@ -3,6 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+
 jobs:
   build:
     docker:
@@ -43,8 +44,9 @@ jobs:
       - run: npx angular-cli-ghpages --dir=dist/PivotHelper --repo=https://GH_TOKEN@github.com/BjoernKW/PivotHelper.git --name="BjoernKW" --email=bjoern@bjoernkw.com
 
 workflows:
-  jobs:
-    - build:
-        filters:
-          branches:
-            only: master
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
