@@ -12,3 +12,4 @@ jobs:
         uses: tinesoft/ngx-uptodate@v1.1.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-labels: ng-update, automated pr, automerge
