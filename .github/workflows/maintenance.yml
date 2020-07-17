@@ -1,9 +1,6 @@
 name: "Angular update"
 
 on:
-  push:
-    branches:
-      - master
   schedule:
     - cron:  '0 2 * * *'
 
