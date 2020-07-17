@@ -37,11 +37,15 @@ jobs:
       # run tests!
       - run: xvfb-run -a npm run test -- --watch=false --browsers=ChromeHeadless
 
-      # build
-      - run: npm run build -- --base-href /PivotHelper/ --deploy-url /PivotHelper/ --prod
+      - when:
+          condition:
+            equal: [ master, << pipeline.git.branch >> ]
+          steps:
+            # build
+            - run: npm run build -- --base-href /PivotHelper/ --deploy-url /PivotHelper/ --prod
 
-      # deploy
-      - run: npx angular-cli-ghpages --dir=dist/PivotHelper --repo=https://GH_TOKEN@github.com/BjoernKW/PivotHelper.git --name="BjoernKW" --email=bjoern@bjoernkw.com
+            # deploy
+            - run: npx angular-cli-ghpages --dir=dist/PivotHelper --repo=https://GH_TOKEN@github.com/BjoernKW/PivotHelper.git --name="BjoernKW" --email=bjoern@bjoernkw.com
 
 workflows:
   build:
