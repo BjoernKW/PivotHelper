@@ -1,5 +1,7 @@
 # PivotHelper
 
+[![CircleCI](https://circleci.com/gh/BjoernKW/PivotHelper.svg?style=shield)](https://circleci.com/gh/BjoernKW/PivotHelper)
+
 **PivotHelper** is a utility web app that generates Pivot tables and charts from CSV files and [Microsoft Excel](https://products.office.com/en/excel) spreadsheets.
 
 ## Usage
