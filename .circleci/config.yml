@@ -56,3 +56,4 @@ workflows:
               only:
                 - master
                 - /chore-ng-update-.+/
+                - /dependabot.+/
