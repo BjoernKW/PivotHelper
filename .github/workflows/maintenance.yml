@@ -2,7 +2,7 @@ name: "Angular update"
 
 on:
   schedule:
-    - cron:  '0 2 * * *'
+    - cron:  '20 11 * * *'
 
 jobs:
   ngxUptodate:
