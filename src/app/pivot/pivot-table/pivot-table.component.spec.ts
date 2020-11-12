@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PivotTableComponent } from './pivot-table.component';
 
@@ -6,7 +6,7 @@ describe('PivotTableComponent', () => {
   let component: PivotTableComponent;
   let fixture: ComponentFixture<PivotTableComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         PivotTableComponent

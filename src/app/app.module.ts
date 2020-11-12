@@ -8,14 +8,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { TableModule } from 'primeng/table';
 import { PivotTableComponent } from './pivot/pivot-table/pivot-table.component';
-import {
-  DialogModule,
-  DropdownModule,
-  InputTextModule,
-  MultiSelectModule,
-  ProgressSpinnerModule
-} from "primeng";
+
 import { FormsModule } from "@angular/forms";
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [

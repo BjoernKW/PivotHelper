@@ -1,25 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PivotComponent } from './pivot.component';
 import { TableModule } from 'primeng/table';
 import { PivotTableComponent } from "./pivot-table/pivot-table.component";
-import {
-  DialogModule,
-  DropdownModule,
-  InputTextModule,
-  MultiSelectModule,
-  ProgressSpinnerModule
-} from "primeng";
 import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ActivatedRoute } from "@angular/router";
 import { of } from "rxjs";
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
 
 describe('PivotComponent', () => {
   let component: PivotComponent;
   let fixture: ComponentFixture<PivotComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         PivotComponent,
