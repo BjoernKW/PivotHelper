@@ -1,10 +1,9 @@
-<p-dialog [(visible)]="displayShareDialog"
-          positionTop="200">
+<p-dialog [(visible)]="displayShareDialog">
   <p-header>
     <strong>Share current pivot table configuration</strong>
   </p-header>
   <form>
-    <div class="form-group">
+    <div class="mb-3">
       <label for="url-for-sharing">
         Copy this URL for sharing your current pivot table settings.
       </label>
@@ -29,7 +28,7 @@
 <form>
   <div class="row">
     <div class="col-sm-6 custom-file-input-column">
-      <div class="form-group">
+      <div class="mb-3">
         <input type="file" class="custom-file-input" id="input-file" (change)="onFileChange($event)">
         <label class="custom-file-label" for="input-file">Choose CSV (.csv) or Excel (.xls, xlsx) file</label>
       </div>
