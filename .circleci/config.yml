@@ -39,7 +39,7 @@ jobs:
 
       - when:
           condition:
-            equal: [ master, << pipeline.git.branch >> ]
+            equal: [ main, << pipeline.git.branch >> ]
           steps:
             # build
             - run: npm run build -- --base-href /PivotHelper/ --deploy-url /PivotHelper/ --configuration production
@@ -54,6 +54,6 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
                 - /chore-ng-update-.+/
                 - /dependabot.+/
