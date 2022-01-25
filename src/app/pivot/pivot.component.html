@@ -118,7 +118,7 @@
                      name="limit-elements"
                      pInputText
                      [(ngModel)]="limitElements"
-                     (input)="showTopElements($event.target.value)">
+                     (input)="showTopElements($any($event.target).value)">
             </div>
           </div>
         </ng-template>
@@ -128,7 +128,8 @@
           <tr>
             <th *ngFor="let column of columns"
                 pResizableColumn
-                [pSortableColumn]="column.field">
+                [pSortableColumn]="column.field"
+                scope="col">
               {{ column.header }}
               <p-sortIcon [field]="column.field"
                           ariaLabel="Activate to sort"
@@ -137,7 +138,8 @@
             </th>
           </tr>
           <tr>
-            <th *ngFor="let column of columns">
+            <th *ngFor="let column of columns"
+                scope="col">
               <div class="filter-match-mode-dropdown">
                 <p-dropdown [name]="column.field"
                             [readonly]="column.isBoolean"
@@ -150,7 +152,7 @@
                      pInputText
                      class="form-control"
                      [type]="getInputFieldTypeForColumn(column)"
-                     (input)="dataTable.filter($event.target.value, column.field, column.filterMatchMode)">
+                     (input)="dataTable.filter($any($event.target).value, column.field, column.filterMatchMode)">
               <ng-template #booleanDropdown>
                 <p-dropdown [options]="booleanDropdownValues"
                             (onChange)="dataTable.filter($event.value, column.field, column.filterMatchMode)"></p-dropdown>

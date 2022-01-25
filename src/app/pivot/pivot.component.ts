@@ -15,12 +15,12 @@ import { PlatformLocation } from '@angular/common';
 export class PivotComponent implements OnInit {
 
   columns: Column[] = [];
-  selectedColumns: Column[] | undefined;
+  selectedColumns: Column[] = [];
   columnsToRemoveFromData: Column[] = [];
   outputData: {}[] = [];
-  originalOutputData: {}[] | undefined;
-  selectedRows: [] | undefined;
-  filteredRows: {}[] | undefined;
+  originalOutputData: {}[] = [];
+  selectedRows: [] = [];
+  filteredRows: {}[] = [];
 
   filterMatchModes = [
     { label: 'contains', value: 'contains' },
@@ -320,7 +320,7 @@ export class PivotComponent implements OnInit {
     if (Object.keys($event.filters).length > 0) {
       this.filteredRows = $event.filteredValue;
     } else {
-      this.filteredRows = undefined;
+      this.filteredRows = [];
     }
 
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
