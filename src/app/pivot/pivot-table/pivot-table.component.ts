@@ -13,11 +13,11 @@ declare const saveSvgAsPng: any;
 })
 export class PivotTableComponent implements OnInit, OnDestroy {
 
-  @Input() data: {}[];
-  @Input() rows: Array<Column>;
-  @Input() columns: Array<Column>;
+  @Input() data: {}[] | undefined;
+  @Input() rows: Array<Column> | undefined;
+  @Input() columns: Array<Column> | undefined;
 
-  private _selectionChangedSubscription: Subscription;
+  private _selectionChangedSubscription: Subscription | undefined;
 
   private readonly _pivotUIRows = 'pivotUIRows';
   private readonly _pivotUICols = 'pivotUICols';
@@ -25,14 +25,14 @@ export class PivotTableComponent implements OnInit, OnDestroy {
   private readonly _pivotUIRendererName = 'pivotUIRendererName';
   private readonly _pivotUIAggregatorName = 'pivotUIAggregatorName';
 
-  private static serializeSVGContent(svgElement) {
+  private static serializeSVGContent(svgElement: Node): string {
     const serializer = new XMLSerializer();
     let source = serializer.serializeToString(svgElement);
 
-    if (!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+    if (!source.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
       source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
     }
-    if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
+    if (!source.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
       source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
@@ -42,7 +42,7 @@ export class PivotTableComponent implements OnInit, OnDestroy {
 
   private static getSvgElement() {
     const svgElements: HTMLCollectionOf<SVGSVGElement> = document.getElementsByTagName('svg');
-    let svgElement: SVGSVGElement;
+    let svgElement: SVGSVGElement | null = null;
 
     if (svgElements && svgElements.length > 0) {
       svgElement = svgElements[0];
@@ -112,8 +112,8 @@ export class PivotTableComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let rows = this.rows.map((row) => row.field );
-    let columns = this.columns.map((column) => column.field );
+    let rows = this.rows?.map((row) => row.field);
+    let columns = this.columns?.map((column) => column.field);
     let vals: string[] = [];
 
     const renderers = $.extend(
@@ -158,7 +158,7 @@ export class PivotTableComponent implements OnInit, OnDestroy {
       renderers: renderers,
       rendererName: rendererName,
       aggregatorName: aggregatorName,
-      onRefresh: function(config) {
+      onRefresh: function(config: any) {
         localStorage.setItem(pivotUIRows, JSON.stringify(config.rows));
         localStorage.setItem(pivotUICols, JSON.stringify(config.cols));
         localStorage.setItem(pivotUIVals, JSON.stringify(config.vals));
@@ -172,7 +172,7 @@ export class PivotTableComponent implements OnInit, OnDestroy {
       pivotUIConfig
     );
 
-    const scrollToElement: Element = document.querySelector('#pivot-table-buttons');
+    const scrollToElement: Element | null = document.querySelector('#pivot-table-buttons');
     if (scrollToElement) {
       scrollToElement
         .scrollIntoView();

@@ -11,7 +11,9 @@ export class ChangeNotificationService {
 
   constructor() { }
 
-  onSelectionChanged(data: {}[]) {
-    this._selectionChanged.next(data);
+  onSelectionChanged(data: {}[] | undefined) {
+    if (data) {
+      this._selectionChanged.next(data);
+    }
   }
 }

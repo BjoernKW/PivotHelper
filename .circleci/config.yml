@@ -42,7 +42,7 @@ jobs:
             equal: [ main, << pipeline.git.branch >> ]
           steps:
             # build
-            - run: npm run build -- --base-href /PivotHelper/ --deploy-url /PivotHelper/ --configuration production
+            - run: npm run build -- --base-href /PivotHelper/ --configuration production
 
             # deploy
             - run: npx angular-cli-ghpages --dir=dist/PivotHelper --repo=https://GH_TOKEN@github.com/BjoernKW/PivotHelper.git --name="BjoernKW" --email=bjoern@bjoernkw.com --message="auto commit [ci skip]"

@@ -15,12 +15,12 @@ import { PlatformLocation } from '@angular/common';
 export class PivotComponent implements OnInit {
 
   columns: Column[] = [];
-  selectedColumns: Column[];
+  selectedColumns: Column[] | undefined;
   columnsToRemoveFromData: Column[] = [];
   outputData: {}[] = [];
-  originalOutputData: {}[];
-  selectedRows: [];
-  filteredRows: {}[];
+  originalOutputData: {}[] | undefined;
+  selectedRows: [] | undefined;
+  filteredRows: {}[] | undefined;
 
   filterMatchModes = [
     { label: 'contains', value: 'contains' },
@@ -38,12 +38,12 @@ export class PivotComponent implements OnInit {
     { label: 'false', value: false }
   ];
 
-  limitElements: number;
+  limitElements: number | undefined;
 
   displayShareDialog = false;
-  urlForSharing: string;
+  urlForSharing: string | undefined;
 
-  private _emailPattern = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  private _emailPattern = /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   private _httpUrlPattern = /^http[s]{0,1}:/;
 
   private readonly _pivotUIRows = 'pivotUIRows';
@@ -229,6 +229,7 @@ export class PivotComponent implements OnInit {
 
     for (const row of this.outputData) {
       for (const column of this.columns) {
+        // @ts-ignore
         this.getColumnWithDataType(row[column.field], column, row);
       }
     }
@@ -282,6 +283,7 @@ export class PivotComponent implements OnInit {
 
         let i = 0;
         for (const column of this.columns) {
+          // @ts-ignore
           outputRow[column.field] = row[i];
           this.getColumnWithDataType(row[i], column, outputRow);
 
@@ -318,7 +320,7 @@ export class PivotComponent implements OnInit {
     if (Object.keys($event.filters).length > 0) {
       this.filteredRows = $event.filteredValue;
     } else {
-      this.filteredRows = null;
+      this.filteredRows = undefined;
     }
 
     this._changeNotificationService.onSelectionChanged($event.filteredValue);
@@ -327,7 +329,7 @@ export class PivotComponent implements OnInit {
   onColumnSelectionChanged(): void {
     this.columnsToRemoveFromData = [];
     for (const column of this.columns) {
-      if (!this.selectedColumns.includes(column)) {
+      if (!this.selectedColumns?.includes(column)) {
         this.columnsToRemoveFromData.push(column);
       }
     }
@@ -353,11 +355,11 @@ export class PivotComponent implements OnInit {
   }
 
   displayShareCurrentPivotTableConfigurationDialog(): void {
-    this.urlForSharing = `${location.protocol}//${location.host}${this._platformLocation.getBaseHrefFromDOM()}`
-      + `?${this._pivotUIRows}=${encodeURIComponent(localStorage.getItem(this._pivotUIRows))}`
-      + `&${this._pivotUICols}=${encodeURIComponent(localStorage.getItem(this._pivotUICols))}`
-      + `&${this._pivotUIVals}=${encodeURIComponent(localStorage.getItem(this._pivotUIVals))}`
-      + `&${this._pivotUIRendererName}=${encodeURIComponent(localStorage.getItem(this._pivotUIRendererName))}`
+    this.urlForSharing = `${location.protocol}//${location.host}${this._platformLocation.getBaseHrefFromDOM()}` // @ts-ignore
+      + `?${this._pivotUIRows}=${encodeURIComponent(localStorage.getItem(this._pivotUIRows))}` // @ts-ignore
+      + `&${this._pivotUICols}=${encodeURIComponent(localStorage.getItem(this._pivotUICols))}` // @ts-ignore
+      + `&${this._pivotUIVals}=${encodeURIComponent(localStorage.getItem(this._pivotUIVals))}` // @ts-ignore
+      + `&${this._pivotUIRendererName}=${encodeURIComponent(localStorage.getItem(this._pivotUIRendererName))}` // @ts-ignore
       + `&${this._pivotUIAggregatorName}=${encodeURIComponent(localStorage.getItem(this._pivotUIAggregatorName))}`;
 
     this.displayShareDialog = true;
@@ -390,10 +392,11 @@ export class PivotComponent implements OnInit {
     return 'text';
   }
 
-  private convertSelectedRows(rows: {}[]): [][] {
+  private convertSelectedRows(rows: {}[]): any[][] {
     const outputRows = [];
 
     let outputRow = [];
+    // @ts-ignore
     for (const column of this.selectedColumns) {
       outputRow.push(column.field);
     }
@@ -402,6 +405,7 @@ export class PivotComponent implements OnInit {
     for (const row of rows) {
       outputRow = [];
       for (const column in row) {
+        // @ts-ignore
         outputRow.push(row[column]);
       }
       outputRows.push(outputRow);
@@ -424,6 +428,7 @@ export class PivotComponent implements OnInit {
     for (const row of targetRows) {
       for (const column of this.columnsToRemoveFromData) {
         if (row.hasOwnProperty(column.field)) {
+          // @ts-ignore
           delete row[column.field];
         }
       }
@@ -451,6 +456,7 @@ export class PivotComponent implements OnInit {
     column.isHttpUrl = column.isHttpUrl && this._httpUrlPattern.test(interpretedValue);
 
     if (column.isBoolean || column.isNumeric || column.isEmailAddress) {
+      // @ts-ignore
       outputRow[column.field] = interpretedValue;
     }
   }
