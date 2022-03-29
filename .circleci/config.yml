@@ -35,7 +35,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: CHROME_BIN=/usr/bin/google-chrome xvfb-run -a npm run test -- --watch=false --browsers=ChromeHeadless
+      - run: xvfb-run -a npm run test -- --watch=false --browsers=ChromeHeadless
 
       - when:
           condition:
