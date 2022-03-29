@@ -125,9 +125,21 @@
               "src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "PivotHelper"
+  "defaultProject": "PivotHelper",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
