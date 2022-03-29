@@ -11,7 +11,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: cimg/node:lts-browsers
+      - image: cimg/node:current-browsers
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
