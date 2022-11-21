@@ -1,0 +1,19 @@
+name: 'Dependabot Batcher: Scheduled'
+on:
+  schedule:
+    - cron: '0 2 * * 0,3'
+
+jobs:
+  dependabot-batcher:
+    name: 'Batch Dependabot PRs'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.DEPENDABOT_BATCHER_TOKEN }}
+
+      - name: 'Dependabot Batcher'
+        uses: Legal-and-General/dependabot-batcher@v1.0.2
+        with:
+          token: ${{ secrets.DEPENDABOT_BATCHER_TOKEN }}
