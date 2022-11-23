@@ -45,7 +45,7 @@ jobs:
 
       - when:
           condition:
-            equal: [ main, << pipeline.git.branch >> ]
+            equal: [ main, batched-dependabot-updates, << pipeline.git.branch >> ]
           steps:
             # build
             - run: npm run build -- --base-href /PivotHelper/ --configuration production
