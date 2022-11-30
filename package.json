@@ -70,7 +70,7 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "^1.7.0",
+    "karma-jasmine-html-reporter": "^2.0.0",
     "npm-check-updates": "^15.3.4",
     "npm-force-resolutions": "^0.0.10",
     "protractor": "~7.0.0",
