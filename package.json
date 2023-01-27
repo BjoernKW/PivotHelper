@@ -33,7 +33,7 @@
     "chart.js": "^4.2.0",
     "core-js": "^3.20.3",
     "jquery": "^3.6.3",
-    "jquery-ui-dist": "^1.13.0",
+    "jquery-ui-dist": "^1.13.2",
     "pivottable": "^2.23.0",
     "popper.js": "^1.16.0",
     "primeicons": "^5.0.0",
