@@ -32,7 +32,7 @@
     "c3": "^0.7.20",
     "chart.js": "^4.2.0",
     "core-js": "^3.20.3",
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.3",
     "jquery-ui-dist": "^1.13.0",
     "pivottable": "^2.23.0",
     "popper.js": "^1.16.0",
