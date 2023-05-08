@@ -31,7 +31,7 @@
     "bootstrap": "^5.2.3",
     "c3": "^0.7.20",
     "chart.js": "^4.3.0",
-    "core-js": "^3.30.1",
+    "core-js": "^3.30.2",
     "jquery": "^3.6.4",
     "jquery-ui-dist": "^1.13.2",
     "pivottable": "^2.23.0",
