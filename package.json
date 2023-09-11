@@ -57,7 +57,7 @@
     "@angular/language-service": "^16.2.4",
     "@types/jasmine": "~4.3.5",
     "@types/jasminewd2": "~2.0.10",
-    "@types/node": "^20.5.9",
+    "@types/node": "^20.6.0",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "ajv-keywords": "^5.1.0",
