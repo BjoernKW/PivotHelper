@@ -52,7 +52,7 @@
     "@angular-eslint/eslint-plugin-template": "16.2.0",
     "@angular-eslint/schematics": "16.2.0",
     "@angular-eslint/template-parser": "16.2.0",
-    "@angular/cli": "^16.2.4",
+    "@angular/cli": "^16.2.5",
     "@angular/compiler-cli": "^16.2.8",
     "@angular/language-service": "^16.2.7",
     "@types/jasmine": "~4.3.6",
