@@ -25,7 +25,7 @@
     "@angular/core": "^17.0.6",
     "@angular/forms": "^17.0.6",
     "@angular/platform-browser": "^17.0.5",
-    "@angular/platform-browser-dynamic": "^17.0.6",
+    "@angular/platform-browser-dynamic": "^17.0.7",
     "@angular/router": "^17.0.6",
     "@fullcalendar/core": "^6.1.10",
     "bootstrap": "^5.3.2",
