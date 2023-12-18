@@ -63,7 +63,7 @@
     "ajv-keywords": "^5.1.0",
     "angular-cli-ghpages": "^1.0.7",
     "codelyzer": "^6.0.2",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "jasmine-core": "~5.1.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.4.2",
