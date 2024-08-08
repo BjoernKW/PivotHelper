@@ -14,6 +14,6 @@ jobs:
           token: ${{ secrets.DEPENDABOT_BATCHER_TOKEN }}
 
       - name: 'Dependabot Batcher'
-        uses: Legal-and-General/dependabot-batcher@v1.0.3
+        uses: Legal-and-General/dependabot-batcher@v1.0.4
         with:
           token: ${{ secrets.DEPENDABOT_BATCHER_TOKEN }}
