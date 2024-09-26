@@ -27,7 +27,7 @@
     "@angular/platform-browser": "^17.0.8",
     "@angular/platform-browser-dynamic": "^17.0.8",
     "@angular/router": "^17.0.8",
-    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/core": "^6.1.15",
     "bootstrap": "^5.3.3",
     "c3": "^0.7.20",
     "chart.js": "^4.4.1",
