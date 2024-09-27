@@ -43,7 +43,7 @@
     "save-svg-as-png": "^1.4.17",
     "tslib": "^2.7.0",
     "xlsx": "^0.18.5",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.14.10"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.9",
