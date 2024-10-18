@@ -59,7 +59,7 @@
     "@types/jasminewd2": "~2.0.13",
     "@types/node": "^22.7.6",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
-    "@typescript-eslint/parser": "^8.9.0",
+    "@typescript-eslint/parser": "^8.10.0",
     "ajv-keywords": "^5.1.0",
     "angular-cli-ghpages": "^2.0.1",
     "codelyzer": "^6.0.2",
