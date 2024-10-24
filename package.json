@@ -21,7 +21,7 @@
     "@angular/animations": "^17.0.7",
     "@angular/cdk": "^18.2.9",
     "@angular/common": "^17.0.8",
-    "@angular/compiler": "^18.2.8",
+    "@angular/compiler": "^18.2.9",
     "@angular/core": "^17.0.8",
     "@angular/forms": "^17.0.8",
     "@angular/platform-browser": "^17.0.8",
