@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@angular/animations": "^17.0.7",
-    "@angular/cdk": "^18.2.12",
+    "@angular/cdk": "^18.2.13",
     "@angular/common": "^17.0.8",
     "@angular/compiler": "^18.2.11",
     "@angular/core": "^17.0.8",
