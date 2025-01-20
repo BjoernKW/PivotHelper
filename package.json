@@ -75,6 +75,6 @@
     "npm-force-resolutions": "^0.0.10",
     "protractor": "~7.0.0",
     "ts-node": "~10.9.2",
-    "typescript": "~5.6.3"
+    "typescript": "~5.7.3"
   }
 }
