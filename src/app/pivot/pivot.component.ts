@@ -8,9 +8,10 @@ import { ActivatedRoute } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
 
 @Component({
-  selector: 'app-pivot',
-  templateUrl: './pivot.component.html',
-  styleUrls: ['./pivot.component.scss']
+    selector: 'app-pivot',
+    templateUrl: './pivot.component.html',
+    styleUrls: ['./pivot.component.scss'],
+    standalone: false
 })
 export class PivotComponent implements OnInit {
 
